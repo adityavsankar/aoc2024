@@ -29,7 +29,12 @@ fn mul(instruction: &str) -> usize {
     let (a, b) = instruction[4..instruction.len() - 1]
         .split_once(',')
         .unwrap();
-    let (a, b) = (a.parse::<usize>().unwrap(), b.parse::<usize>().unwrap());
+    let (a, b) = (
+        a.parse::<usize>()
+            .expect("Input should only contain positive integers"),
+        b.parse::<usize>()
+            .expect("Input should only contain positive integers"),
+    );
     a * b
 }
 

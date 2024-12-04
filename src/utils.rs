@@ -1,5 +1,6 @@
 use std::time::{Duration, Instant};
 
+#[derive(Clone, Copy, Debug)]
 pub struct TimedResult<T> {
     pub result: T,
     pub duration: Duration,
