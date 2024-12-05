@@ -103,7 +103,16 @@ mod tests {
         let grid = parse(INPUT);
         assert_eq!(grid.len(), 10);
         assert_eq!(grid[0].len(), 10);
-        assert!(grid.windows(2).all(|r| r[0].len() == r[1].len()))
+        assert_eq!(grid[0], vec![77, 77, 77, 83, 88, 88, 77, 65, 83, 77]);
+        assert_eq!(grid[1], vec![77, 83, 65, 77, 88, 77, 83, 77, 83, 65]);
+        assert_eq!(grid[2], vec![65, 77, 88, 83, 88, 77, 65, 65, 77, 77]);
+        assert_eq!(grid[3], vec![77, 83, 65, 77, 65, 83, 77, 83, 77, 88]);
+        assert_eq!(grid[4], vec![88, 77, 65, 83, 65, 77, 88, 65, 77, 77]);
+        assert_eq!(grid[5], vec![88, 88, 65, 77, 77, 88, 88, 65, 77, 65]);
+        assert_eq!(grid[6], vec![83, 77, 83, 77, 83, 65, 83, 88, 83, 83]);
+        assert_eq!(grid[7], vec![83, 65, 88, 65, 77, 65, 83, 65, 65, 65]);
+        assert_eq!(grid[8], vec![77, 65, 77, 77, 77, 88, 77, 77, 77, 77]);
+        assert_eq!(grid[9], vec![77, 88, 77, 88, 65, 88, 77, 65, 83, 88]);
     }
 
     #[test]
