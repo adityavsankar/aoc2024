@@ -1,10 +1,10 @@
 use super::DayResult;
 use crate::utils::time_execution;
 use regex::{Match, Regex};
+use std::fs;
 
 pub fn run() -> DayResult {
-    let input =
-        std::fs::read_to_string("inputs/input03.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/input03.txt").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
 
