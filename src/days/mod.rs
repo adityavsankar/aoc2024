@@ -1,6 +1,8 @@
-use std::time::Duration;
+#![allow(clippy::cast_possible_wrap)]
+#![allow(clippy::cast_sign_loss)]
 
 use crate::utils::TimedResult;
+use std::time::Duration;
 
 pub mod day01;
 pub mod day02;

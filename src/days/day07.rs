@@ -48,9 +48,9 @@ pub fn part2(calibration_equations: &[(usize, Vec<usize>)]) -> usize {
 fn solve(calibration_equations: &[(usize, Vec<usize>)], is_part2: bool) -> usize {
     fn is_possible(acc: usize, arr: &[usize], i: usize, target: usize, is_part2: bool) -> bool {
         if i >= arr.len() {
-            return acc == target;
+            acc == target
         } else if acc > target {
-            return false;
+            false
         } else {
             is_possible(acc + arr[i], arr, i + 1, target, is_part2)
                 || is_possible(acc * arr[i], arr, i + 1, target, is_part2)

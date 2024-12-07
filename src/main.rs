@@ -1,6 +1,7 @@
 mod days;
 mod utils;
 
+#[allow(clippy::wildcard_imports)]
 use days::*;
 use std::{env, error::Error, fmt::Display, time::Duration};
 

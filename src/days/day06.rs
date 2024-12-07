@@ -10,7 +10,7 @@ pub fn run() -> DayResult {
     let parsed = time_execution(|| parse(&input));
     let grid = parsed.result;
     let part1 = time_execution(|| part1(&grid));
-    let part2 = time_execution(|| part2(grid));
+    let part2 = time_execution(|| part2(&grid));
 
     DayResult {
         parse_duration: parsed.duration,
@@ -24,12 +24,9 @@ pub fn parse(input: &str) -> Vec<Vec<u8>> {
 }
 
 fn find_start(grid: &[Vec<u8>]) -> (usize, usize) {
-    let (m, n) = (grid.len(), grid[0].len());
-    for i in 0..m {
-        for j in 0..n {
-            if grid[i][j] == b'^' {
-                return (i, j);
-            }
+    for (i, row) in grid.iter().enumerate() {
+        if let Some(j) = row.iter().position(|&ch| ch == b'^') {
+            return (i, j);
         }
     }
     unreachable!("Grid must have a start location")
@@ -65,19 +62,19 @@ fn patrol(grid: &[Vec<u8>], start: (usize, usize)) -> Option<HashSet<(usize, usi
 }
 
 pub fn part1(grid: &[Vec<u8>]) -> usize {
-    let start = find_start(&grid);
+    let start = find_start(grid);
     let tiles = patrol(grid, start);
     tiles.expect("Input should not contain cycles").len()
 }
 
-pub fn part2(grid: Vec<Vec<u8>>) -> usize {
-    let start = find_start(&grid);
-    let tiles = patrol(&grid, start).expect("Input should not contain cycles");
+pub fn part2(grid: &[Vec<u8>]) -> usize {
+    let start = find_start(grid);
+    let tiles = patrol(grid, start).expect("Input should not contain cycles");
 
     tiles
         .into_par_iter()
         .filter(|&(i, j)| {
-            let mut g = grid.clone();
+            let mut g = grid.to_owned();
             g[i][j] = b'#';
             patrol(&g, start).is_none()
         })
@@ -117,7 +114,7 @@ mod tests {
     #[test]
     fn test_part2() {
         let grid = parse(INPUT);
-        let result = part2(grid);
+        let result = part2(&grid);
         assert_eq!(result, 6);
     }
 }
