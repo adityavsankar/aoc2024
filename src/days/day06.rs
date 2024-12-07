@@ -36,7 +36,7 @@ fn find_start(grid: &[Vec<u8>]) -> (usize, usize) {
 }
 
 fn patrol(grid: &[Vec<u8>], start: (usize, usize)) -> Option<HashSet<(usize, usize)>> {
-    const DIRS: [(i8, i8); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
+    const DIRS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
     let (m, n) = (grid.len(), grid[0].len());
     let (mut i, mut j) = start;
     let mut dir = 0;
@@ -47,7 +47,10 @@ fn patrol(grid: &[Vec<u8>], start: (usize, usize)) -> Option<HashSet<(usize, usi
         if !path.insert((i, j, dir)) {
             return None;
         }
-        let (ni, nj) = (i + DIRS[dir].0 as usize, j + DIRS[dir].1 as usize);
+        let (ni, nj) = (
+            (i as isize + DIRS[dir].0) as usize,
+            (j as isize + DIRS[dir].1) as usize,
+        );
         if !(0..m).contains(&ni) || !(0..n).contains(&nj) {
             break;
         }
@@ -58,11 +61,7 @@ fn patrol(grid: &[Vec<u8>], start: (usize, usize)) -> Option<HashSet<(usize, usi
         }
     }
 
-    Some(
-        path.into_iter()
-            .map(|(i, j, _)| (i as usize, j as usize))
-            .collect(),
-    )
+    Some(path.into_iter().map(|(i, j, _)| (i, j)).collect())
 }
 
 pub fn part1(grid: &[Vec<u8>]) -> usize {
