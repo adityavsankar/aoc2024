@@ -1,8 +1,7 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use rayon::prelude::*;
-use std::collections::HashSet;
-use std::fs;
+use std::{collections::HashSet, fs};
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/input06.txt").expect("Input file should be readable");

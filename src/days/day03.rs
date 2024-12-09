@@ -1,5 +1,5 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use regex::{Match, Regex};
 use std::fs;
 
@@ -7,9 +7,9 @@ pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/input03.txt").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
-
-    let part1 = time_execution(|| part1(&parsed.result));
-    let part2 = time_execution(|| part2(&parsed.result));
+    let matches = parsed.result;
+    let part1 = time_execution(|| part1(&matches));
+    let part2 = time_execution(|| part2(&matches));
 
     DayResult {
         parse_duration: parsed.duration,

@@ -1,14 +1,14 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use std::fs;
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/input04.txt").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
-
-    let part1 = time_execution(|| part1(&parsed.result, "XMAS".as_bytes()));
-    let part2 = time_execution(|| part2(&parsed.result, "MAS".as_bytes()));
+    let grid = parsed.result;
+    let part1 = time_execution(|| part1(&grid, "XMAS".as_bytes()));
+    let part2 = time_execution(|| part2(&grid, "MAS".as_bytes()));
 
     DayResult {
         parse_duration: parsed.duration,

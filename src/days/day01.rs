@@ -1,5 +1,5 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use std::{collections::HashMap, fs};
 
 pub fn run() -> DayResult {
@@ -7,7 +7,6 @@ pub fn run() -> DayResult {
 
     let parsed = time_execution(|| parse(&input));
     let (mut left_list, mut right_list, right_map) = parsed.result;
-
     let part1 = time_execution(|| part1(&mut left_list, &mut right_list));
     let part2 = time_execution(|| part2(&left_list, &right_map));
 
@@ -26,7 +25,7 @@ pub fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
     for line in input.lines() {
         let (left, right) = line
             .split_once("   ")
-            .expect("Exactly two numbers should be present on each line seperated by three spaces");
+            .expect("Exactly two numbers should be present on each line separated by three spaces");
 
         let left = left
             .parse::<usize>()

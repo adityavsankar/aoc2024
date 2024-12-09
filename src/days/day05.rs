@@ -1,5 +1,5 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use std::{cmp::Ordering, collections::HashSet, fs};
 
 pub fn run() -> DayResult {

@@ -1,5 +1,5 @@
 use super::DayResult;
-use crate::utils::time_execution;
+use crate::utils::bench::time_execution;
 use itertools::Itertools;
 use std::fs;
 
@@ -8,7 +8,6 @@ pub fn run() -> DayResult {
 
     let parsed = time_execution(|| parse(&input));
     let reports = parsed.result;
-
     let part1 = time_execution(|| part1(&reports));
     let part2 = time_execution(|| part2(reports));
 

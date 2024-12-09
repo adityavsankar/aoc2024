@@ -1,7 +1,7 @@
 #![allow(clippy::cast_possible_wrap)]
 #![allow(clippy::cast_sign_loss)]
 
-use crate::utils::TimedResult;
+use crate::utils::bench::TimedResult;
 use std::time::Duration;
 
 pub mod day01;
@@ -11,6 +11,8 @@ pub mod day04;
 pub mod day05;
 pub mod day06;
 pub mod day07;
+pub mod day08;
+pub mod day09;
 
 #[derive(Clone, Copy, Debug)]
 pub struct DayResult {
