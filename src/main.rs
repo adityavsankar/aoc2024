@@ -94,6 +94,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         7 => Ok(day07::run()),
         8 => Ok(day08::run()),
         9 => Ok(day09::run()),
+        10 => Ok(day10::run()),
         _ => Err(format!("Day {day} not implemented!")),
     }?;
 

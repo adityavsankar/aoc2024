@@ -1,15 +1,18 @@
 use super::DayResult;
-use crate::utils::bench::time_execution;
+use crate::utils::{
+    bench::time_execution,
+    grid::{Direction, Grid, Point, Robot},
+};
 use rayon::prelude::*;
-use std::{collections::HashSet, fs};
+use std::{collections::HashSet, fs, str};
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/input06.txt").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
-    let grid = parsed.result;
-    let part1 = time_execution(|| part1(&grid));
-    let part2 = time_execution(|| part2(&grid));
+    let lab = parsed.result;
+    let part1 = time_execution(|| part1(&lab));
+    let part2 = time_execution(|| part2(&lab));
 
     DayResult {
         parse_duration: parsed.duration,
@@ -18,63 +21,54 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Vec<u8>> {
-    input.lines().map(|line| line.bytes().collect()).collect()
+pub fn parse(input: &str) -> Grid<u8> {
+    Grid::from(input)
 }
 
-fn find_start(grid: &[Vec<u8>]) -> (usize, usize) {
-    for (i, row) in grid.iter().enumerate() {
-        if let Some(j) = row.iter().position(|&ch| ch == b'^') {
-            return (i, j);
-        }
-    }
-    unreachable!("Grid must have a start location")
+fn find_start(lab: &Grid<u8>) -> Point {
+    lab.iter_with_coords()
+        .find(|&(_, ch)| *ch == b'^')
+        .map(|(point, _)| point)
+        .expect("Lab should have a guard")
 }
 
-fn patrol(grid: &[Vec<u8>], start: (usize, usize)) -> Option<HashSet<(usize, usize)>> {
-    const DIRS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
-    let (m, n) = (grid.len(), grid[0].len());
-    let (mut i, mut j) = start;
-    let mut dir = 0;
-
+fn patrol(lab: &Grid<u8>, start: Point) -> Option<HashSet<Point>> {
+    let mut guard = Robot::new(start, Direction::North);
     let mut path = HashSet::with_capacity(5000);
 
     loop {
-        if !path.insert((i, j, dir)) {
-            return None;
-        }
-        let (ni, nj) = (
-            (i as isize + DIRS[dir].0) as usize,
-            (j as isize + DIRS[dir].1) as usize,
-        );
-        if !(0..m).contains(&ni) || !(0..n).contains(&nj) {
+        let next_pos = guard.next_pos();
+        if !lab.contains(next_pos) {
             break;
         }
-        if grid[ni][nj] == b'#' {
-            dir = (dir + 1) % 4;
+        if lab[next_pos] == b'#' {
+            guard.rotate(90);
         } else {
-            (i, j) = (ni, nj);
+            guard.locomote();
+        }
+        if !path.insert(guard) {
+            return None;
         }
     }
 
-    Some(path.into_iter().map(|(i, j, _)| (i, j)).collect())
+    Some(path.into_iter().map(|robot| robot.position()).collect())
 }
 
-pub fn part1(grid: &[Vec<u8>]) -> usize {
-    let start = find_start(grid);
-    let tiles = patrol(grid, start);
+pub fn part1(lab: &Grid<u8>) -> usize {
+    let start = find_start(lab);
+    let tiles = patrol(lab, start);
     tiles.expect("Input should not contain cycles").len()
 }
 
-pub fn part2(grid: &[Vec<u8>]) -> usize {
-    let start = find_start(grid);
-    let tiles = patrol(grid, start).expect("Input should not contain cycles");
+pub fn part2(lab: &Grid<u8>) -> usize {
+    let start = find_start(lab);
+    let tiles = patrol(lab, start).expect("Input should not contain cycles");
 
     tiles
         .into_par_iter()
-        .filter(|&(i, j)| {
-            let mut g = grid.to_owned();
-            g[i][j] = b'#';
+        .filter(|&point| {
+            let mut g = lab.to_owned();
+            g[point] = b'#';
             patrol(&g, start).is_none()
         })
         .count()
@@ -89,18 +83,18 @@ mod tests {
     #[test]
     fn test_parse() {
         let grid = parse(INPUT);
-        assert_eq!(grid.len(), 10);
-        assert_eq!(grid[0].len(), 10);
-        assert_eq!(grid[0], vec![46, 46, 46, 46, 35, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[1], vec![46, 46, 46, 46, 46, 46, 46, 46, 46, 35]);
-        assert_eq!(grid[2], vec![46, 46, 46, 46, 46, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[3], vec![46, 46, 35, 46, 46, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[4], vec![46, 46, 46, 46, 46, 46, 46, 35, 46, 46]);
-        assert_eq!(grid[5], vec![46, 46, 46, 46, 46, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[6], vec![46, 35, 46, 46, 94, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[7], vec![46, 46, 46, 46, 46, 46, 46, 46, 35, 46]);
-        assert_eq!(grid[8], vec![35, 46, 46, 46, 46, 46, 46, 46, 46, 46]);
-        assert_eq!(grid[9], vec![46, 46, 46, 46, 46, 46, 35, 46, 46, 46]);
+        assert_eq!(grid.height(), 10);
+        assert_eq!(grid.width(), 10);
+        assert_eq!(str::from_utf8(grid.row(0)).unwrap(), "....#.....");
+        assert_eq!(str::from_utf8(grid.row(1)).unwrap(), ".........#");
+        assert_eq!(str::from_utf8(grid.row(2)).unwrap(), "..........");
+        assert_eq!(str::from_utf8(grid.row(3)).unwrap(), "..#.......");
+        assert_eq!(str::from_utf8(grid.row(4)).unwrap(), ".......#..");
+        assert_eq!(str::from_utf8(grid.row(5)).unwrap(), "..........");
+        assert_eq!(str::from_utf8(grid.row(6)).unwrap(), ".#..^.....");
+        assert_eq!(str::from_utf8(grid.row(7)).unwrap(), "........#.");
+        assert_eq!(str::from_utf8(grid.row(8)).unwrap(), "#.........");
+        assert_eq!(str::from_utf8(grid.row(9)).unwrap(), "......#...");
     }
 
     #[test]

@@ -17,6 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
+#[allow(clippy::type_complexity)]
 pub fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize)>) {
     let (mut disk, mut files, mut holes) = (Vec::new(), Vec::new(), Vec::new());
     let mut pos = 0;
@@ -66,7 +67,7 @@ pub fn part1(mut disk: Vec<isize>) -> usize {
 
 pub fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> usize {
     for (file_pos, file_len) in files.iter_mut().rev() {
-        for (hole_pos, hole_len) in holes.iter_mut() {
+        for (hole_pos, hole_len) in &mut holes {
             if *hole_pos > *file_pos {
                 break;
             }
