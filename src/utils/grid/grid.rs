@@ -1,4 +1,4 @@
-use super::Point;
+use super::Coord;
 use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone)]
@@ -21,14 +21,14 @@ impl<T: Copy> Grid<T> {
         self.width * self.height
     }
 
-    pub fn get(&self, point: Point) -> Option<&T> {
+    pub fn get(&self, point: Coord) -> Option<&T> {
         if !self.contains(point) {
             return None;
         }
         self.cells.get(self.point_to_index(point))
     }
 
-    pub fn get_mut(&mut self, point: Point) -> Option<&mut T> {
+    pub fn get_mut(&mut self, point: Coord) -> Option<&mut T> {
         if !self.contains(point) {
             return None;
         }
@@ -36,7 +36,7 @@ impl<T: Copy> Grid<T> {
         self.cells.get_mut(index)
     }
 
-    pub fn contains(&self, point: Point) -> bool {
+    pub fn contains(&self, point: Coord) -> bool {
         (0..self.height as isize).contains(&point.r) && (0..self.width as isize).contains(&point.c)
     }
 
@@ -45,15 +45,15 @@ impl<T: Copy> Grid<T> {
         &self.cells[r..r + self.width]
     }
 
-    fn point_to_index(&self, point: Point) -> usize {
+    fn point_to_index(&self, point: Coord) -> usize {
         point.r as usize * self.width + point.c as usize
     }
 
-    fn index_to_point(&self, index: usize) -> Point {
-        Point::new((index / self.width) as isize, (index % self.width) as isize)
+    fn index_to_point(&self, index: usize) -> Coord {
+        Coord::new((index / self.width) as isize, (index % self.width) as isize)
     }
 
-    pub fn iter_with_coords(&self) -> impl Iterator<Item = (Point, &T)> {
+    pub fn iter_with_coords(&self) -> impl Iterator<Item = (Coord, &T)> {
         self.cells
             .iter()
             .enumerate()
@@ -61,16 +61,16 @@ impl<T: Copy> Grid<T> {
     }
 }
 
-impl<T: Copy> Index<Point> for Grid<T> {
+impl<T: Copy> Index<Coord> for Grid<T> {
     type Output = T;
 
-    fn index(&self, index: Point) -> &Self::Output {
+    fn index(&self, index: Coord) -> &Self::Output {
         &self.cells[self.point_to_index(index)]
     }
 }
 
-impl<T: Copy> IndexMut<Point> for Grid<T> {
-    fn index_mut(&mut self, index: Point) -> &mut Self::Output {
+impl<T: Copy> IndexMut<Coord> for Grid<T> {
+    fn index_mut(&mut self, index: Coord) -> &mut Self::Output {
         let index = self.point_to_index(index);
         &mut self.cells[index]
     }

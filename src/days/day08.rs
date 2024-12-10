@@ -1,7 +1,7 @@
 use super::DayResult;
 use crate::utils::{
     bench::time_execution,
-    grid::{Grid, Point},
+    grid::{Coord, Grid},
 };
 use itertools::Itertools;
 use std::{
@@ -36,8 +36,8 @@ pub fn part2(grid: &Grid<u8>) -> usize {
     solve(grid, true)
 }
 
-fn find_antennae(grid: &Grid<u8>) -> HashMap<u8, Vec<Point>> {
-    let mut antenna_map: HashMap<u8, Vec<Point>> = HashMap::new();
+fn find_antennae(grid: &Grid<u8>) -> HashMap<u8, Vec<Coord>> {
+    let mut antenna_map: HashMap<u8, Vec<Coord>> = HashMap::new();
     grid.iter_with_coords()
         .filter(|(_, &ch)| ch != b'.' && ch != b'#')
         .for_each(|(point, &ch)| antenna_map.entry(ch).or_default().push(point));

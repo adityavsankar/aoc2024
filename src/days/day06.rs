@@ -1,7 +1,7 @@
 use super::DayResult;
 use crate::utils::{
     bench::time_execution,
-    grid::{Direction, Grid, Point, Robot},
+    grid::{Coord, Direction, Grid, Robot},
 };
 use rayon::prelude::*;
 use std::{collections::HashSet, fs, str};
@@ -25,14 +25,14 @@ pub fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
-fn find_start(lab: &Grid<u8>) -> Point {
+fn find_start(lab: &Grid<u8>) -> Coord {
     lab.iter_with_coords()
         .find(|&(_, ch)| *ch == b'^')
         .map(|(point, _)| point)
         .expect("Lab should have a guard")
 }
 
-fn patrol(lab: &Grid<u8>, start: Point) -> Option<HashSet<Point>> {
+fn patrol(lab: &Grid<u8>, start: Coord) -> Option<HashSet<Coord>> {
     let mut guard = Robot::new(start, Direction::North);
     let mut path = HashSet::with_capacity(5000);
 

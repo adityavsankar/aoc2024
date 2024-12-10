@@ -1,7 +1,7 @@
 use super::DayResult;
 use crate::utils::{
     bench::time_execution,
-    grid::{Grid, Point},
+    grid::{Coord, Grid},
 };
 use std::{collections::HashSet, fs, str};
 
@@ -25,10 +25,10 @@ pub fn parse(input: &str) -> Grid<u8> {
 }
 
 fn dfs(
-    start: Point,
+    start: Coord,
     grid: &Grid<u8>,
-    stack: &mut Vec<(Point, u8)>,
-    mut peaks: Option<&mut HashSet<Point>>,
+    stack: &mut Vec<(Coord, u8)>,
+    mut peaks: Option<&mut HashSet<Coord>>,
 ) -> usize {
     let mut rating = 0;
     stack.push((start, b'0'));
