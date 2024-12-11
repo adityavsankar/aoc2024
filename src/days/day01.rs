@@ -79,17 +79,15 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let mut left_list = vec![3, 4, 2, 1, 3, 3];
-        let mut right_list = vec![4, 3, 5, 3, 9, 3];
-        let result = part1(&mut left_list, &mut right_list);
-        assert_eq!(result, 11);
+        let (mut left_list, mut right_list, _) = parse(INPUT);
+        let total_distance = part1(&mut left_list, &mut right_list);
+        assert_eq!(total_distance, 11);
     }
 
     #[test]
     fn test_part2() {
-        let left_list = vec![3, 4, 2, 1, 3, 3];
-        let right_map = HashMap::from([(3, 3), (4, 1), (5, 1), (9, 1)]);
-        let result = part2(&left_list, &right_map);
-        assert_eq!(result, 31);
+        let (left_list, _, right_map) = parse(INPUT);
+        let similarity_score = part2(&left_list, &right_map);
+        assert_eq!(similarity_score, 31);
     }
 }

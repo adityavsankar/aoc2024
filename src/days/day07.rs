@@ -104,14 +104,14 @@ mod tests {
     #[test]
     fn test_part1() {
         let calibration_equations = parse(INPUT);
-        let result = part1(&calibration_equations);
-        assert_eq!(result, 3749);
+        let total_calibration_result = part1(&calibration_equations);
+        assert_eq!(total_calibration_result, 3749);
     }
 
     #[test]
     fn test_part2() {
         let calibration_equations = parse(INPUT);
-        let result = part2(&calibration_equations);
-        assert_eq!(result, 11387);
+        let total_calibration_result = part2(&calibration_equations);
+        assert_eq!(total_calibration_result, 11387);
     }
 }

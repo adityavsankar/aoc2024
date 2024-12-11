@@ -7,9 +7,9 @@ pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/03.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
-    let matches = parsed.result;
-    let part1 = time_execution(|| part1(&matches));
-    let part2 = time_execution(|| part2(&matches));
+    let instructions = parsed.result;
+    let part1 = time_execution(|| part1(&instructions));
+    let part2 = time_execution(|| part2(&instructions));
 
     DayResult {
         parse_duration: parsed.duration,
@@ -99,15 +99,15 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let matches = parse(INPUT1);
-        let result = part1(&matches);
+        let instructions = parse(INPUT1);
+        let result = part1(&instructions);
         assert_eq!(result, 161);
     }
 
     #[test]
     fn test_part2() {
-        let matches = parse(INPUT2);
-        let result = part2(&matches);
-        assert_eq!(result, 48);
+        let instructions = parse(INPUT2);
+        let enabled_result = part2(&instructions);
+        assert_eq!(enabled_result, 48);
     }
 }

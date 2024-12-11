@@ -122,14 +122,14 @@ mod tests {
     #[test]
     fn test_part1() {
         let (rules, updates) = parse(INPUT);
-        let result = part1(&rules, &updates);
-        assert_eq!(result, 143);
+        let correct_order_total = part1(&rules, &updates);
+        assert_eq!(correct_order_total, 143);
     }
 
     #[test]
     fn test_part2() {
         let (rules, updates) = parse(INPUT);
-        let result = part2(&rules, updates);
-        assert_eq!(result, 123);
+        let incorrect_order_total = part2(&rules, updates);
+        assert_eq!(incorrect_order_total, 123);
     }
 }

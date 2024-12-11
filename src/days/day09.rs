@@ -141,14 +141,14 @@ mod tests {
     #[test]
     fn test_part1() {
         let (disk, _, _) = parse(INPUT);
-        let result = part1(disk);
-        assert_eq!(result, 1928);
+        let checksum = part1(disk);
+        assert_eq!(checksum, 1928);
     }
 
     #[test]
     fn test_part2() {
         let (_, files, holes) = parse(INPUT);
-        let result = part2(files, holes);
-        assert_eq!(result, 2858);
+        let checksum = part2(files, holes);
+        assert_eq!(checksum, 2858);
     }
 }

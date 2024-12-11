@@ -99,15 +99,15 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let grid = parse(INPUT);
-        let result = part1(&grid);
-        assert_eq!(result, 41);
+        let lab = parse(INPUT);
+        let distinct_position_count = part1(&lab);
+        assert_eq!(distinct_position_count, 41);
     }
 
     #[test]
     fn test_part2() {
-        let grid = parse(INPUT);
-        let result = part2(&grid);
-        assert_eq!(result, 6);
+        let lab = parse(INPUT);
+        let potential_obstruction_count = part2(&lab);
+        assert_eq!(potential_obstruction_count, 6);
     }
 }

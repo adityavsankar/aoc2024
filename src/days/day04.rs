@@ -6,9 +6,9 @@ pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/04.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
-    let grid = parsed.result;
-    let part1 = time_execution(|| part1(&grid, "XMAS".as_bytes()));
-    let part2 = time_execution(|| part2(&grid, "MAS".as_bytes()));
+    let word_search = parsed.result;
+    let part1 = time_execution(|| part1(&word_search, "XMAS".as_bytes()));
+    let part2 = time_execution(|| part2(&word_search, "MAS".as_bytes()));
 
     DayResult {
         parse_duration: parsed.duration,
@@ -21,7 +21,14 @@ pub fn parse(input: &str) -> Vec<Vec<u8>> {
     input.lines().map(|line| line.bytes().collect()).collect()
 }
 
-fn match_count(mat: &[Vec<u8>], target: &[u8], r: usize, c: usize, m: usize, n: usize) -> u8 {
+fn match_count(
+    word_search: &[Vec<u8>],
+    target: &[u8],
+    r: usize,
+    c: usize,
+    m: usize,
+    n: usize,
+) -> u8 {
     let (m, n, r, c) = (m as isize, n as isize, r as isize, c as isize);
     let mut count = 0;
 
@@ -30,7 +37,9 @@ fn match_count(mat: &[Vec<u8>], target: &[u8], r: usize, c: usize, m: usize, n: 
             if target.iter().enumerate().all(|(k, &ch)| {
                 let nr = r + k as isize * i;
                 let nc = c + k as isize * j;
-                (0..m).contains(&nr) && (0..n).contains(&nc) && mat[nr as usize][nc as usize] == ch
+                (0..m).contains(&nr)
+                    && (0..n).contains(&nc)
+                    && word_search[nr as usize][nc as usize] == ch
             }) {
                 count += 1;
             }
@@ -40,15 +49,15 @@ fn match_count(mat: &[Vec<u8>], target: &[u8], r: usize, c: usize, m: usize, n: 
     count
 }
 
-pub fn part1(mat: &[Vec<u8>], target: &[u8]) -> usize {
+pub fn part1(word_search: &[Vec<u8>], target: &[u8]) -> usize {
     let first_char = target[0];
-    let (m, n) = (mat.len(), mat[0].len());
+    let (m, n) = (word_search.len(), word_search[0].len());
     let mut ans = 0;
 
     for r in 0..m {
         for c in 0..n {
-            if mat[r][c] == first_char {
-                ans += match_count(mat, target, r, c, m, n) as usize;
+            if word_search[r][c] == first_char {
+                ans += match_count(word_search, target, r, c, m, n) as usize;
             }
         }
     }
@@ -56,20 +65,27 @@ pub fn part1(mat: &[Vec<u8>], target: &[u8]) -> usize {
     ans
 }
 
-fn is_x(mat: &[Vec<u8>], target: &[u8], rev_target: &[u8], r: usize, c: usize, th: usize) -> bool {
+fn is_x(
+    word_search: &[Vec<u8>],
+    target: &[u8],
+    rev_target: &[u8],
+    r: usize,
+    c: usize,
+    th: usize,
+) -> bool {
     let (r, c, th) = (r as isize, c as isize, th as isize);
 
     let check_diagonal = |dir: isize, target: &[u8]| {
         (-th..=th)
             .enumerate()
-            .all(|(i, k)| mat[(r + k) as usize][(c + k * dir) as usize] == target[i])
+            .all(|(i, k)| word_search[(r + k) as usize][(c + k * dir) as usize] == target[i])
     };
 
     (check_diagonal(1, target) || check_diagonal(1, rev_target))
         && (check_diagonal(-1, target) || check_diagonal(-1, rev_target))
 }
 
-pub fn part2(mat: &[Vec<u8>], target: &[u8]) -> usize {
+pub fn part2(word_search: &[Vec<u8>], target: &[u8]) -> usize {
     let t = target.len();
     if t % 2 == 0 {
         eprintln!("The target must be of odd length");
@@ -78,12 +94,13 @@ pub fn part2(mat: &[Vec<u8>], target: &[u8]) -> usize {
     let th = t / 2;
     let middle_char = target[th];
     let rev_target: Vec<u8> = target.iter().rev().copied().collect();
-    let (m, n) = (mat.len(), mat[0].len());
+    let (m, n) = (word_search.len(), word_search[0].len());
     let mut ans = 0;
 
     for r in th..m - th {
         for c in th..n - th {
-            if mat[r][c] == middle_char && is_x(mat, target, &rev_target, r, c, th) {
+            if word_search[r][c] == middle_char && is_x(word_search, target, &rev_target, r, c, th)
+            {
                 ans += 1;
             }
         }
@@ -117,15 +134,15 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let grid = parse(INPUT);
-        let result = part1(&grid, "XMAS".as_bytes());
-        assert_eq!(result, 18);
+        let word_search = parse(INPUT);
+        let xmas_count = part1(&word_search, "XMAS".as_bytes());
+        assert_eq!(xmas_count, 18);
     }
 
     #[test]
     fn test_part2() {
-        let grid = parse(INPUT);
-        let result = part2(&grid, "MAS".as_bytes());
-        assert_eq!(result, 9);
+        let word_search = parse(INPUT);
+        let x_mas_count = part2(&word_search, "MAS".as_bytes());
+        assert_eq!(x_mas_count, 9);
     }
 }

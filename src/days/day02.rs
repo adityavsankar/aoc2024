@@ -23,8 +23,9 @@ pub fn parse(input: &str) -> Vec<Vec<usize>> {
     lines
         .map(|line| {
             line.split(' ')
-                .map(|num| {
-                    num.parse::<usize>()
+                .map(|level| {
+                    level
+                        .parse::<usize>()
                         .expect("Input should only contain positive integers")
                 })
                 .collect()
@@ -33,11 +34,12 @@ pub fn parse(input: &str) -> Vec<Vec<usize>> {
 }
 
 fn is_safe(report: &[usize]) -> bool {
-    let monotonic = report.is_sorted() || report.is_sorted_by(|a, b| a >= b);
-    let safe = report
+    let is_monotonic =
+        report.is_sorted() || report.is_sorted_by(|level_a, level_b| level_a >= level_b);
+    let is_gradual = report
         .windows(2)
         .all(|w| (1..=3).contains(&w[1].abs_diff(w[0])));
-    monotonic && safe
+    is_monotonic && is_gradual
 }
 
 pub fn part1(reports: &[Vec<usize>]) -> usize {
@@ -76,14 +78,14 @@ mod tests {
     #[test]
     fn test_part1() {
         let reports = parse(INPUT);
-        let result = part1(&reports);
-        assert_eq!(result, 2);
+        let safe_report_count = part1(&reports);
+        assert_eq!(safe_report_count, 2);
     }
 
     #[test]
     fn test_part2() {
         let reports = parse(INPUT);
-        let result = part2(reports);
-        assert_eq!(result, 4);
+        let safe_report_count = part2(reports);
+        assert_eq!(safe_report_count, 4);
     }
 }
