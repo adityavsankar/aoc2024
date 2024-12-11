@@ -6,7 +6,7 @@ use crate::utils::{
 use std::{collections::HashSet, fs, str};
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input10.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/10.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let grid = parsed.result;

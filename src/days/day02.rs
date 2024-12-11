@@ -4,7 +4,7 @@ use itertools::Itertools;
 use std::fs;
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input02.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/02.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let reports = parsed.result;

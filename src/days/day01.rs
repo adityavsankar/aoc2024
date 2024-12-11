@@ -3,7 +3,7 @@ use crate::utils::bench::time_execution;
 use std::{collections::HashMap, fs};
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input01.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/01.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let (mut left_list, mut right_list, right_map) = parsed.result;

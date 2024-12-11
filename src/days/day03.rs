@@ -4,7 +4,7 @@ use regex::{Match, Regex};
 use std::fs;
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input03.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/03.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let matches = parsed.result;

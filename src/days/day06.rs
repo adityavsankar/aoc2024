@@ -7,7 +7,7 @@ use rayon::prelude::*;
 use std::{collections::HashSet, fs, str};
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input06.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/06.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let lab = parsed.result;

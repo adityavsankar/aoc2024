@@ -3,7 +3,7 @@ use crate::utils::bench::time_execution;
 use std::{fs, iter::repeat};
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input09.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/09.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let (disk, files, holes) = parsed.result;

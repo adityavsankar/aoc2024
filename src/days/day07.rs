@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use std::fs;
 
 pub fn run() -> DayResult {
-    let input = fs::read_to_string("inputs/input07.txt").expect("Input file should be readable");
+    let input = fs::read_to_string("inputs/07.in").expect("Input file should be readable");
 
     let parsed = time_execution(|| parse(&input));
     let calibration_equations = parsed.result;
