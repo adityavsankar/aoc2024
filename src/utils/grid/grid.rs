@@ -21,23 +21,23 @@ impl<T: Copy> Grid<T> {
         self.width * self.height
     }
 
-    pub fn get(&self, point: Coord) -> Option<&T> {
-        if !self.contains(point) {
+    pub fn get(&self, coord: Coord) -> Option<&T> {
+        if !self.contains(coord) {
             return None;
         }
-        self.cells.get(self.point_to_index(point))
+        self.cells.get(self.coord_to_index(coord))
     }
 
-    pub fn get_mut(&mut self, point: Coord) -> Option<&mut T> {
-        if !self.contains(point) {
+    pub fn get_mut(&mut self, coord: Coord) -> Option<&mut T> {
+        if !self.contains(coord) {
             return None;
         }
-        let index = self.point_to_index(point);
+        let index = self.coord_to_index(coord);
         self.cells.get_mut(index)
     }
 
-    pub fn contains(&self, point: Coord) -> bool {
-        (0..self.height as isize).contains(&point.r) && (0..self.width as isize).contains(&point.c)
+    pub fn contains(&self, coord: Coord) -> bool {
+        (0..self.height as isize).contains(&coord.r) && (0..self.width as isize).contains(&coord.c)
     }
 
     pub fn row(&self, r: usize) -> &[T] {
@@ -45,11 +45,11 @@ impl<T: Copy> Grid<T> {
         &self.cells[r..r + self.width]
     }
 
-    fn point_to_index(&self, point: Coord) -> usize {
-        point.r as usize * self.width + point.c as usize
+    fn coord_to_index(&self, coord: Coord) -> usize {
+        coord.r as usize * self.width + coord.c as usize
     }
 
-    fn index_to_point(&self, index: usize) -> Coord {
+    fn index_to_coord(&self, index: usize) -> Coord {
         Coord::new((index / self.width) as isize, (index % self.width) as isize)
     }
 
@@ -57,7 +57,7 @@ impl<T: Copy> Grid<T> {
         self.cells
             .iter()
             .enumerate()
-            .map(|(i, cell)| (self.index_to_point(i), cell))
+            .map(|(i, cell)| (self.index_to_coord(i), cell))
     }
 }
 
@@ -65,13 +65,13 @@ impl<T: Copy> Index<Coord> for Grid<T> {
     type Output = T;
 
     fn index(&self, index: Coord) -> &Self::Output {
-        &self.cells[self.point_to_index(index)]
+        &self.cells[self.coord_to_index(index)]
     }
 }
 
 impl<T: Copy> IndexMut<Coord> for Grid<T> {
     fn index_mut(&mut self, index: Coord) -> &mut Self::Output {
-        let index = self.point_to_index(index);
+        let index = self.coord_to_index(index);
         &mut self.cells[index]
     }
 }

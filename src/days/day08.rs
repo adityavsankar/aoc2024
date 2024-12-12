@@ -40,7 +40,7 @@ fn find_antennae(city: &Grid<u8>) -> HashMap<u8, Vec<Coord>> {
     let mut antenna_map: HashMap<u8, Vec<Coord>> = HashMap::new();
     city.iter_with_coords()
         .filter(|(_, &ch)| ch != b'.' && ch != b'#')
-        .for_each(|(point, &ch)| antenna_map.entry(ch).or_default().push(point));
+        .for_each(|(coord, &ch)| antenna_map.entry(ch).or_default().push(coord));
     antenna_map
 }
 

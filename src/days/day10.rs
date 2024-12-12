@@ -32,17 +32,17 @@ fn dfs(
 ) -> usize {
     let mut rating = 0;
     stack.push((start, b'0'));
-    while let Some((point, height)) = stack.pop() {
+    while let Some((coord, height)) = stack.pop() {
         if height == b'9' {
             if let Some(ref mut peaks) = peaks {
-                peaks.insert(point);
+                peaks.insert(coord);
             }
             rating += 1;
             continue;
         }
-        for point in point.orthogonal_neighbours() {
-            if grid.contains(point) && grid[point] == height + 1 {
-                stack.push((point, grid[point]));
+        for coord in coord.orthogonal_neighbours() {
+            if grid.contains(coord) && grid[coord] == height + 1 {
+                stack.push((coord, grid[coord]));
             }
         }
     }
@@ -54,9 +54,9 @@ pub fn part1(topo_map: &Grid<u8>) -> usize {
     let mut peaks = HashSet::new();
     topo_map
         .iter_with_coords()
-        .filter(|(_, cell)| **cell == b'0')
-        .map(|(point, _)| {
-            dfs(point, topo_map, &mut stack, Some(&mut peaks));
+        .filter(|(_, &cell)| cell == b'0')
+        .map(|(coord, _)| {
+            dfs(coord, topo_map, &mut stack, Some(&mut peaks));
             let score = peaks.len();
             peaks.clear();
             score
@@ -68,8 +68,8 @@ pub fn part2(topo_map: &Grid<u8>) -> usize {
     let mut stack = Vec::new();
     topo_map
         .iter_with_coords()
-        .filter(|(_, cell)| **cell == b'0')
-        .map(|(point, _)| dfs(point, topo_map, &mut stack, None))
+        .filter(|(_, &cell)| cell == b'0')
+        .map(|(coord, _)| dfs(coord, topo_map, &mut stack, None))
         .sum()
 }
 

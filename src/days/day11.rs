@@ -37,7 +37,7 @@ fn solve(stones: &[usize], blinks: u8) -> usize {
 
     for _ in 0..blinks {
         let mut new_counts = HashMap::with_capacity(6000);
-        for (&stone, &count) in stone_counts.iter() {
+        for (&stone, &count) in &stone_counts {
             if stone == 0 {
                 *new_counts.entry(1).or_default() += count;
             } else {
