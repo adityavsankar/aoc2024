@@ -21,6 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         10 => Ok(day10::run()),
         11 => Ok(day11::run()),
         12 => Ok(day12::run()),
+        13 => Ok(day13::run()),
         _ => Err(format!("Day {day} not implemented!")),
     }?;
 

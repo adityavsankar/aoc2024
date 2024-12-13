@@ -6,22 +6,22 @@ struct Row {
     time_taken: String,
 }
 
-struct TableDimensions {
-    step_width: usize,
-    result_width: usize,
-    time_width: usize,
+struct TableColumnWidths {
+    step: usize,
+    result: usize,
+    time: usize,
 }
 
-impl TableDimensions {
+impl TableColumnWidths {
     fn horizontal_line(&self, left: char, middle: char, right: char) -> String {
         format!(
             "{}{}{}{}{}{}{}",
             left,
-            "─".repeat(self.step_width + 2),
+            "─".repeat(self.step + 2),
             middle,
-            "─".repeat(self.result_width + 2),
+            "─".repeat(self.result + 2),
             middle,
-            "─".repeat(self.time_width + 2),
+            "─".repeat(self.time + 2),
             right
         )
     }
@@ -32,9 +32,9 @@ impl TableDimensions {
             row.0,
             row.1,
             row.2,
-            step_width = self.step_width,
-            result_width = self.result_width,
-            time_width = self.time_width
+            step_width = self.step,
+            result_width = self.result,
+            time_width = self.time
         )
     }
 }
@@ -65,12 +65,12 @@ fn create_rows(result: DayResult) -> Vec<Row> {
         Row {
             step: String::from("Total"),
             result: String::from("-"),
-            time_taken: format!("{:?}", part1.duration + part2.duration),
+            time_taken: format!("{:?}", parse_duration + part1.duration + part2.duration),
         },
     ]
 }
 
-fn calculate_dimensions(rows: &[Row], min_width: usize) -> TableDimensions {
+fn calculate_dimensions(rows: &[Row], min_width: usize) -> TableColumnWidths {
     let step_width = rows
         .iter()
         .map(|r| r.step.len())
@@ -95,10 +95,10 @@ fn calculate_dimensions(rows: &[Row], min_width: usize) -> TableDimensions {
         .max("Time Taken".len())
         .max(min_width);
 
-    TableDimensions {
-        step_width,
-        result_width,
-        time_width,
+    TableColumnWidths {
+        step: step_width,
+        result: result_width,
+        time: time_width,
     }
 }
 

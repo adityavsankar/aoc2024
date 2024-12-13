@@ -12,6 +12,14 @@ impl Coord {
         Self { r, c }
     }
 
+    pub fn x(&self) -> isize {
+        self.c
+    }
+
+    pub fn y(&self) -> isize {
+        self.r
+    }
+
     pub fn manhattan_distance(&self, rhs: Self) -> usize {
         self.r.abs_diff(rhs.r) + self.c.abs_diff(rhs.c)
     }
