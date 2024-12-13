@@ -42,11 +42,12 @@ fn solve(vals: &[Coord], is_part2: bool) -> isize {
             };
             let det = a_button.x() * b_button.y() - b_button.x() * a_button.y();
             let det1 = prize.x() * b_button.y() - b_button.x() * prize.y();
-            let det2 = a_button.x() * prize.y() - prize.x() * a_button.y();
-            if det1 % det != 0 || det2 % det != 0 {
+            if det1 % det != 0 {
                 None
             } else {
-                Some(3 * det1 / det + det2 / det)
+                let a_presses = det1 / det;
+                let b_presses = (prize.x() - a_presses * a_button.x()) / b_button.x();
+                Some(3 * a_presses + b_presses)
             }
         })
         .sum()

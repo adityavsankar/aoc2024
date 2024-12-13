@@ -75,6 +75,18 @@ impl Mul<isize> for Coord {
     }
 }
 
+impl From<(isize, isize)> for Coord {
+    fn from(value: (isize, isize)) -> Self {
+        Coord::new(value.0, value.1)
+    }
+}
+
+impl From<Coord> for (isize, isize) {
+    fn from(value: Coord) -> Self {
+        (value.r, value.c)
+    }
+}
+
 impl From<Direction> for Coord {
     fn from(value: Direction) -> Self {
         match value {
