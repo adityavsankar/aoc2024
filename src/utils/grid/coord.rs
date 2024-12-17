@@ -1,5 +1,5 @@
 use super::Direction;
-use std::ops::{Add, AddAssign, Mul, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, Mul, Rem, Sub, SubAssign};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct Coord {
@@ -25,15 +25,15 @@ impl Coord {
     }
 
     pub fn orthogonal_neighbours(self) -> [Coord; 4] {
-        Direction::ORTHOGONAL.map(|dir| self + Coord::from(dir))
+        Direction::ORTHOGONAL.map(|dir| self + dir)
     }
 
     pub fn diagonal_neighbours(self) -> [Coord; 4] {
-        Direction::DIAGONAL.map(|dir| self + Coord::from(dir))
+        Direction::DIAGONAL.map(|dir| self + dir)
     }
 
     pub fn all_neighbours(self) -> [Coord; 8] {
-        Direction::ALL.map(|dir| self + Coord::from(dir))
+        Direction::ALL.map(|dir| self + dir)
     }
 }
 
@@ -45,10 +45,24 @@ impl Add for Coord {
     }
 }
 
+impl Add<Direction> for Coord {
+    type Output = Coord;
+
+    fn add(self, rhs: Direction) -> Self::Output {
+        self + Coord::from(rhs)
+    }
+}
+
 impl AddAssign for Coord {
     fn add_assign(&mut self, rhs: Self) {
         self.r += rhs.r;
         self.c += rhs.c;
+    }
+}
+
+impl AddAssign<Direction> for Coord {
+    fn add_assign(&mut self, rhs: Direction) {
+        *self += Coord::from(rhs);
     }
 }
 
@@ -72,6 +86,30 @@ impl Mul<isize> for Coord {
 
     fn mul(self, rhs: isize) -> Self::Output {
         Coord::new(self.r * rhs, self.c * rhs)
+    }
+}
+
+impl Mul<Coord> for isize {
+    type Output = Coord;
+
+    fn mul(self, rhs: Coord) -> Self::Output {
+        Coord::new(self * rhs.r, self * rhs.c)
+    }
+}
+
+impl Div<isize> for Coord {
+    type Output = Coord;
+
+    fn div(self, rhs: isize) -> Self::Output {
+        Coord::new(self.r / rhs, self.c / rhs)
+    }
+}
+
+impl Rem<isize> for Coord {
+    type Output = Coord;
+
+    fn rem(self, rhs: isize) -> Self::Output {
+        Coord::new(self.r % rhs, self.c % rhs)
     }
 }
 

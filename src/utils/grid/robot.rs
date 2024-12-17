@@ -2,8 +2,8 @@ use super::{Coord, Direction};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Robot {
-    pos: Coord,
-    dir: Direction,
+    pub pos: Coord,
+    pub dir: Direction,
 }
 
 impl Robot {
@@ -23,7 +23,7 @@ impl Robot {
     }
 
     pub fn next_pos(&self) -> Coord {
-        self.pos + Coord::from(self.dir)
+        self.pos + self.dir
     }
 
     pub fn rotate(&mut self, degrees: i16) {
@@ -31,6 +31,6 @@ impl Robot {
     }
 
     pub fn locomote(&mut self) {
-        self.pos += Coord::from(self.dir);
+        self.pos += self.dir;
     }
 }

@@ -1,10 +1,10 @@
 use super::DayResult;
 use crate::utils::{
     bench::time_execution,
-    grid::{Coord, Direction, Grid, Robot},
+    grid::{Coord, Direction::*, Grid, Robot},
 };
 use rayon::prelude::*;
-use std::{collections::HashSet, fs, str};
+use std::{collections::HashSet, fs};
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/06.in").expect("Input file should be readable");
@@ -25,15 +25,8 @@ pub fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
-fn find_start(lab: &Grid<u8>) -> Coord {
-    lab.iter_with_coords()
-        .find(|&(_, ch)| *ch == b'^')
-        .map(|(point, _)| point)
-        .expect("Lab should have a guard")
-}
-
 fn patrol(lab: &Grid<u8>, start: Coord) -> Option<HashSet<Coord>> {
-    let mut guard = Robot::new(start, Direction::North);
+    let mut guard = Robot::new(start, North);
     let mut path = HashSet::with_capacity(5000);
 
     loop {
@@ -55,13 +48,13 @@ fn patrol(lab: &Grid<u8>, start: Coord) -> Option<HashSet<Coord>> {
 }
 
 pub fn part1(lab: &Grid<u8>) -> usize {
-    let start = find_start(lab);
+    let start = lab.position(b'^').expect("Lab should have a guard");
     let tiles = patrol(lab, start);
     tiles.expect("Input should not contain cycles").len()
 }
 
 pub fn part2(lab: &Grid<u8>) -> usize {
-    let start = find_start(lab);
+    let start = lab.position(b'^').expect("Lab should have a guard");
     let tiles = patrol(lab, start).expect("Input should not contain cycles");
 
     tiles
@@ -77,6 +70,7 @@ pub fn part2(lab: &Grid<u8>) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str;
 
     const INPUT: &'static str = "....#.....\n.........#\n..........\n..#.......\n.......#..\n..........\n.#..^.....\n........#.\n#.........\n......#...";
 

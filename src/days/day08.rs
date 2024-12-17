@@ -6,7 +6,7 @@ use crate::utils::{
 use itertools::Itertools;
 use std::{
     collections::{HashMap, HashSet},
-    fs, str,
+    fs,
 };
 
 pub fn run() -> DayResult {
@@ -75,6 +75,7 @@ fn solve(city: &Grid<u8>, is_part2: bool) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str;
 
     const INPUT: &'static str = "............\n........0...\n.....0......\n.......0....\n....0.......\n......A.....\n............\n............\n........A...\n.........A..\n............\n............\n";
 

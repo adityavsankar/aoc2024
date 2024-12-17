@@ -3,7 +3,7 @@ use crate::utils::{
     bench::time_execution,
     grid::{Coord, Grid},
 };
-use std::{collections::HashSet, fs, str};
+use std::{collections::HashSet, fs};
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/12.in").expect("Input file should be readable");
@@ -107,6 +107,7 @@ pub fn part2(farm: &Grid<u8>) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str;
 
     const INPUT: &'static str = "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE";
 

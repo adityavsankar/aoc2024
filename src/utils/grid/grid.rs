@@ -2,13 +2,21 @@ use super::Coord;
 use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone)]
-pub struct Grid<T: Copy> {
+pub struct Grid<T: Copy + PartialEq> {
     height: usize,
     width: usize,
     cells: Vec<T>,
 }
 
-impl<T: Copy> Grid<T> {
+impl<T: Copy + PartialEq> Grid<T> {
+    pub fn new(height: usize, width: usize, default_value: T) -> Self {
+        Self {
+            height,
+            width,
+            cells: vec![default_value; height * width],
+        }
+    }
+
     pub fn height(&self) -> usize {
         self.height
     }
@@ -41,7 +49,7 @@ impl<T: Copy> Grid<T> {
     }
 
     pub fn row(&self, r: usize) -> &[T] {
-        let r = self.height * r;
+        let r = self.width * r;
         &self.cells[r..r + self.width]
     }
 
@@ -59,9 +67,19 @@ impl<T: Copy> Grid<T> {
             .enumerate()
             .map(|(i, cell)| (self.index_to_coord(i), cell))
     }
+
+    pub fn position(&self, target: T) -> Option<Coord> {
+        self.iter_with_coords()
+            .find(|&(_, cell)| *cell == target)
+            .map(|(coord, _)| coord)
+    }
+
+    pub fn fill(&mut self, value: T) {
+        self.cells.fill(value);
+    }
 }
 
-impl<T: Copy> Index<Coord> for Grid<T> {
+impl<T: Copy + PartialEq> Index<Coord> for Grid<T> {
     type Output = T;
 
     fn index(&self, index: Coord) -> &Self::Output {
@@ -69,14 +87,14 @@ impl<T: Copy> Index<Coord> for Grid<T> {
     }
 }
 
-impl<T: Copy> IndexMut<Coord> for Grid<T> {
+impl<T: Copy + PartialEq> IndexMut<Coord> for Grid<T> {
     fn index_mut(&mut self, index: Coord) -> &mut Self::Output {
         let index = self.coord_to_index(index);
         &mut self.cells[index]
     }
 }
 
-impl<T: Copy> IntoIterator for Grid<T> {
+impl<T: Copy + PartialEq> IntoIterator for Grid<T> {
     type Item = T;
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
@@ -102,5 +120,19 @@ impl From<&str> for Grid<u8> {
             width,
             cells,
         }
+    }
+}
+
+impl std::fmt::Display for Grid<u8> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for row in 0..self.height {
+            for col in 0..self.width {
+                let index = self.coord_to_index(Coord::new(row as isize, col as isize));
+                let ch = self.cells[index] as char;
+                write!(f, "{ch}")?;
+            }
+            writeln!(f)?;
+        }
+        Ok(())
     }
 }

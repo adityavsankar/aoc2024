@@ -3,7 +3,7 @@ use crate::utils::{
     bench::time_execution,
     grid::{Coord, Grid},
 };
-use std::{collections::HashSet, fs, str};
+use std::{collections::HashSet, fs};
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/10.in").expect("Input file should be readable");
@@ -76,6 +76,7 @@ pub fn part2(topo_map: &Grid<u8>) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str;
 
     const INPUT: &'static str =
         "89010123\n78121874\n87430965\n96549874\n45678903\n32019012\n01329801\n10456732";
