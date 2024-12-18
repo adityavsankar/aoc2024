@@ -24,16 +24,18 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Grid<u8> {
+fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
-pub fn part1(city: &Grid<u8>) -> usize {
-    solve(city, false)
+fn part1(city: &Grid<u8>) -> String {
+    let antinode_count = solve(city, false);
+    format!("{antinode_count}")
 }
 
-pub fn part2(city: &Grid<u8>) -> usize {
-    solve(city, true)
+fn part2(city: &Grid<u8>) -> String {
+    let antinode_count = solve(city, true);
+    format!("{antinode_count}")
 }
 
 fn find_antennae(city: &Grid<u8>) -> HashMap<u8, Vec<Coord>> {
@@ -102,13 +104,13 @@ mod tests {
     fn test_part1() {
         let city = parse(INPUT);
         let antinode_count = part1(&city);
-        assert_eq!(antinode_count, 14);
+        assert_eq!(antinode_count, "14");
     }
 
     #[test]
     fn test_part2() {
         let city = parse(INPUT);
         let antinode_count = part2(&city);
-        assert_eq!(antinode_count, 34);
+        assert_eq!(antinode_count, "34");
     }
 }

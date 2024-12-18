@@ -17,7 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Vec<u8>> {
+fn parse(input: &str) -> Vec<Vec<u8>> {
     input.lines().map(|line| line.bytes().collect()).collect()
 }
 
@@ -49,20 +49,20 @@ fn match_count(
     count
 }
 
-pub fn part1(word_search: &[Vec<u8>], target: &[u8]) -> usize {
+fn part1(word_search: &[Vec<u8>], target: &[u8]) -> String {
     let first_char = target[0];
     let (m, n) = (word_search.len(), word_search[0].len());
-    let mut ans = 0;
+    let mut xmas_count = 0;
 
     for r in 0..m {
         for c in 0..n {
             if word_search[r][c] == first_char {
-                ans += match_count(word_search, target, r, c, m, n) as usize;
+                xmas_count += match_count(word_search, target, r, c, m, n) as usize;
             }
         }
     }
 
-    ans
+    format!("{xmas_count}")
 }
 
 fn is_x(
@@ -85,28 +85,28 @@ fn is_x(
         && (check_diagonal(-1, target) || check_diagonal(-1, rev_target))
 }
 
-pub fn part2(word_search: &[Vec<u8>], target: &[u8]) -> usize {
+fn part2(word_search: &[Vec<u8>], target: &[u8]) -> String {
     let t = target.len();
     if t % 2 == 0 {
         eprintln!("The target must be of odd length");
-        return 0;
+        return "-".into();
     }
     let th = t / 2;
     let middle_char = target[th];
     let rev_target: Vec<u8> = target.iter().rev().copied().collect();
     let (m, n) = (word_search.len(), word_search[0].len());
-    let mut ans = 0;
+    let mut x_mas_count: usize = 0;
 
     for r in th..m - th {
         for c in th..n - th {
             if word_search[r][c] == middle_char && is_x(word_search, target, &rev_target, r, c, th)
             {
-                ans += 1;
+                x_mas_count += 1;
             }
         }
     }
 
-    ans
+    format!("{x_mas_count}")
 }
 
 #[cfg(test)]
@@ -136,13 +136,13 @@ mod tests {
     fn test_part1() {
         let word_search = parse(INPUT);
         let xmas_count = part1(&word_search, "XMAS".as_bytes());
-        assert_eq!(xmas_count, 18);
+        assert_eq!(xmas_count, "18");
     }
 
     #[test]
     fn test_part2() {
         let word_search = parse(INPUT);
         let x_mas_count = part2(&word_search, "MAS".as_bytes());
-        assert_eq!(x_mas_count, 9);
+        assert_eq!(x_mas_count, "9");
     }
 }

@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Vec<usize>> {
+fn parse(input: &str) -> Vec<Vec<usize>> {
     let lines = input.lines();
     lines
         .map(|line| {
@@ -42,19 +42,21 @@ fn is_safe(report: &[usize]) -> bool {
     is_monotonic && is_gradual
 }
 
-pub fn part1(reports: &[Vec<usize>]) -> usize {
-    reports.iter().filter(|report| is_safe(report)).count()
+fn part1(reports: &[Vec<usize>]) -> String {
+    let safe_report_count = reports.iter().filter(|report| is_safe(report)).count();
+    format!("{safe_report_count}")
 }
 
-pub fn part2(reports: Vec<Vec<usize>>) -> usize {
-    reports
+fn part2(reports: Vec<Vec<usize>>) -> String {
+    let safe_report_count = reports
         .into_iter()
         .map(|report| {
             let k = report.len() - 1;
             report.into_iter().combinations(k).any(|r| is_safe(&r))
         })
         .filter(|&is_safe| is_safe)
-        .count()
+        .count();
+    format!("{safe_report_count}")
 }
 
 #[cfg(test)]
@@ -79,13 +81,13 @@ mod tests {
     fn test_part1() {
         let reports = parse(INPUT);
         let safe_report_count = part1(&reports);
-        assert_eq!(safe_report_count, 2);
+        assert_eq!(safe_report_count, "2");
     }
 
     #[test]
     fn test_part2() {
         let reports = parse(INPUT);
         let safe_report_count = part2(reports);
-        assert_eq!(safe_report_count, 4);
+        assert_eq!(safe_report_count, "4");
     }
 }

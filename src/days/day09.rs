@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
 }
 
 #[allow(clippy::type_complexity)]
-pub fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize)>) {
+fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize)>) {
     let (mut disk, mut files, mut holes) = (Vec::new(), Vec::new(), Vec::new());
     let mut pos = 0;
 
@@ -37,7 +37,7 @@ pub fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize
     (disk, files, holes)
 }
 
-pub fn part1(mut disk: Vec<isize>) -> usize {
+fn part1(mut disk: Vec<isize>) -> String {
     let mut hole_idx = disk
         .iter()
         .position(|&block| block < 0)
@@ -58,14 +58,15 @@ pub fn part1(mut disk: Vec<isize>) -> usize {
         }
     }
 
-    disk[..hole_idx]
+    let checksum: usize = disk[..hole_idx]
         .iter()
         .enumerate()
         .map(|(i, &block)| i * block as usize)
-        .sum()
+        .sum();
+    format!("{checksum}")
 }
 
-pub fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> usize {
+fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> String {
     for (file_pos, file_len) in files.iter_mut().rev() {
         for (hole_pos, hole_len) in &mut holes {
             if *hole_pos > *file_pos {
@@ -80,11 +81,12 @@ pub fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> 
         }
     }
 
-    files
+    let checksum: usize = files
         .iter()
         .enumerate()
         .map(|(i, &(file_pos, file_len))| (file_pos..file_pos + file_len).sum::<usize>() * i)
-        .sum()
+        .sum();
+    format!("{checksum}")
 }
 
 #[cfg(test)]
@@ -142,13 +144,13 @@ mod tests {
     fn test_part1() {
         let (disk, _, _) = parse(INPUT);
         let checksum = part1(disk);
-        assert_eq!(checksum, 1928);
+        assert_eq!(checksum, "1928");
     }
 
     #[test]
     fn test_part2() {
         let (_, files, holes) = parse(INPUT);
         let checksum = part2(files, holes);
-        assert_eq!(checksum, 2858);
+        assert_eq!(checksum, "2858");
     }
 }

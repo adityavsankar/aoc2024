@@ -20,8 +20,8 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Grid<u8> {
-    input.into()
+fn parse(input: &str) -> Grid<u8> {
+    Grid::from(input)
 }
 
 fn is_in_region(farm: &Grid<u8>, coord: Coord, plant: u8) -> bool {
@@ -77,7 +77,7 @@ fn count_sides(farm: &Grid<u8>, region: &HashSet<Coord>, plant: u8) -> usize {
         .sum()
 }
 
-pub fn solve<F>(farm: &Grid<u8>, cost_metric: F) -> usize
+fn solve<F>(farm: &Grid<u8>, cost_metric: F) -> usize
 where
     F: Fn(&Grid<u8>, &HashSet<Coord>, u8) -> usize,
 {
@@ -96,12 +96,14 @@ where
         .sum()
 }
 
-pub fn part1(farm: &Grid<u8>) -> usize {
-    solve(farm, count_perimeter)
+fn part1(farm: &Grid<u8>) -> String {
+    let total_fence_cost = solve(farm, count_perimeter);
+    format!("{total_fence_cost}")
 }
 
-pub fn part2(farm: &Grid<u8>) -> usize {
-    solve(farm, count_sides)
+fn part2(farm: &Grid<u8>) -> String {
+    let total_fence_cost = solve(farm, count_sides);
+    format!("{total_fence_cost}")
 }
 
 #[cfg(test)]
@@ -132,13 +134,13 @@ mod tests {
     fn test_part1() {
         let farm = parse(INPUT);
         let total_fence_cost = part1(&farm);
-        assert_eq!(total_fence_cost, 1930);
+        assert_eq!(total_fence_cost, "1930");
     }
 
     #[test]
     fn test_part2() {
         let topo_map = parse(INPUT);
         let total_fence_cost = part2(&topo_map);
-        assert_eq!(total_fence_cost, 1206);
+        assert_eq!(total_fence_cost, "1206");
     }
 }

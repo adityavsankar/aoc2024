@@ -5,12 +5,6 @@ use crate::utils::{
 };
 use std::fs;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Robot14 {
-    pub pos: Coord,
-    pub vel: Coord,
-}
-
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/14.in").expect("Input file should be readable");
 
@@ -26,9 +20,14 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Robot14> {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct Robot14 {
+    pub pos: Coord,
+    pub vel: Coord,
+}
+
+fn parse(input: &str) -> Vec<Robot14> {
     input
-        .trim()
         .lines()
         .map(|line| {
             let (pos, vel) = line.split_once(' ').unwrap();
@@ -41,7 +40,7 @@ pub fn parse(input: &str) -> Vec<Robot14> {
         .collect()
 }
 
-pub fn part1(robots: &[Robot14], time: usize, height: usize, width: usize) -> usize {
+fn part1(robots: &[Robot14], time: usize, height: usize, width: usize) -> String {
     let (time, height, width) = (time as isize, height as isize, width as isize);
     let (half_height, half_width) = (height / 2, width / 2);
     let (mut top_left, mut top_right, mut bot_left, mut bot_right) = (0, 0, 0, 0);
@@ -66,10 +65,11 @@ pub fn part1(robots: &[Robot14], time: usize, height: usize, width: usize) -> us
         }
     }
 
-    top_left * top_right * bot_left * bot_right
+    let safety_factor: usize = top_left * top_right * bot_left * bot_right;
+    format!("{safety_factor}")
 }
 
-pub fn part2(robots: &[Robot14], height: usize, width: usize) -> usize {
+fn part2(robots: &[Robot14], height: usize, width: usize) -> String {
     let (height, width) = (height as isize, width as isize);
     let mut elapsed = 0;
     let mut seen = Grid::new(height as usize, width as usize, false);
@@ -87,7 +87,7 @@ pub fn part2(robots: &[Robot14], height: usize, width: usize) -> usize {
             }
             seen[final_pos] = true;
         }
-        return elapsed as usize;
+        return format!("{elapsed}");
     }
 }
 
@@ -160,13 +160,13 @@ mod tests {
     fn test_part1() {
         let robots = parse(INPUT);
         let safety_factor = part1(&robots, 100, 7, 11);
-        assert_eq!(safety_factor, 12);
+        assert_eq!(safety_factor, "12");
     }
 
     #[test]
     fn test_part2() {
         let robots = parse(INPUT);
         let tree_time = part2(&robots, 7, 11);
-        assert_eq!(tree_time, 1);
+        assert_eq!(tree_time, "1");
     }
 }

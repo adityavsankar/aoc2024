@@ -17,7 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<usize> {
+fn parse(input: &str) -> Vec<usize> {
     input
         .trim()
         .split(' ')
@@ -59,12 +59,14 @@ fn solve(stones: &[usize], blinks: u8) -> usize {
     stone_counts.values().sum()
 }
 
-pub fn part1(stones: &[usize]) -> usize {
-    solve(stones, 25)
+fn part1(stones: &[usize]) -> String {
+    let stone_count = solve(stones, 25);
+    format!("{stone_count}")
 }
 
-pub fn part2(stones: &[usize]) -> usize {
-    solve(stones, 75)
+fn part2(stones: &[usize]) -> String {
+    let stone_count = solve(stones, 75);
+    format!("{stone_count}")
 }
 
 #[cfg(test)]
@@ -85,13 +87,13 @@ mod tests {
     fn test_part1() {
         let stones = parse(INPUT);
         let stone_count = part1(&stones);
-        assert_eq!(stone_count, 55312);
+        assert_eq!(stone_count, "55312");
     }
 
     #[test]
     fn test_part2() {
         let stones = parse(INPUT);
         let stone_count = part2(&stones);
-        assert_eq!(stone_count, 65601038650482);
+        assert_eq!(stone_count, "65601038650482");
     }
 }

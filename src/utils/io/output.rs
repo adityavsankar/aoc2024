@@ -54,12 +54,12 @@ fn create_rows(result: DayResult) -> Vec<Row> {
         },
         Row {
             step: String::from("Part 1"),
-            result: format!("{}", part1.result),
+            result: part1.result,
             time_taken: format!("{:?}", part1.duration),
         },
         Row {
             step: String::from("Part 2"),
-            result: format!("{}", part2.result),
+            result: part2.result,
             time_taken: format!("{:?}", part2.duration),
         },
         Row {

@@ -9,12 +9,6 @@ use crate::utils::{
 };
 use std::{collections::VecDeque, fs};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Robot14 {
-    pub pos: Coord,
-    pub vel: Coord,
-}
-
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/15.in").expect("Input file should be readable");
 
@@ -30,7 +24,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> (Grid<u8>, Grid<u8>, Vec<Direction>) {
+fn parse(input: &str) -> (Grid<u8>, Grid<u8>, Vec<Direction>) {
     let input = input.trim().replace('\r', "");
     let (warehouse, movements) = input.split_once("\n\n").unwrap();
 
@@ -64,7 +58,7 @@ fn go(warehouse: &mut Grid<u8>, robot: &mut Robot) {
     robot.locomote();
 }
 
-pub fn part1(mut warehouse: Grid<u8>, movements: &[Direction]) -> usize {
+fn part1(mut warehouse: Grid<u8>, movements: &[Direction]) -> String {
     let start = warehouse
         .position(b'@')
         .expect("Warehouse should contain robot");
@@ -93,14 +87,15 @@ pub fn part1(mut warehouse: Grid<u8>, movements: &[Direction]) -> usize {
         }
     }
 
-    warehouse
+    let total_gps_coordinates: usize = warehouse
         .iter_with_coords()
         .filter(|(_, ch)| **ch == b'O')
         .map(|(coord, _)| coord.r as usize * 100 + coord.c as usize)
-        .sum()
+        .sum();
+    format!("{total_gps_coordinates}")
 }
 
-pub fn part2(mut warehouse: Grid<u8>, movements: &[Direction]) -> usize {
+fn part2(mut warehouse: Grid<u8>, movements: &[Direction]) -> String {
     let start = warehouse
         .position(b'@')
         .expect("Warehouse should contain robot");
@@ -197,11 +192,12 @@ pub fn part2(mut warehouse: Grid<u8>, movements: &[Direction]) -> usize {
         }
     }
 
-    warehouse
+    let total_gps_coordinates: usize = warehouse
         .iter_with_coords()
         .filter(|(_, ch)| **ch == b'[')
         .map(|(coord, _)| coord.r as usize * 100 + coord.c as usize)
-        .sum()
+        .sum();
+    format!("{total_gps_coordinates}")
 }
 
 #[cfg(test)]
@@ -258,13 +254,13 @@ mod tests {
     fn test_part1() {
         let (warehouse, _, movements) = parse(INPUT1);
         let total_gps_coordinates = part1(warehouse, &movements);
-        assert_eq!(total_gps_coordinates, 2028);
+        assert_eq!(total_gps_coordinates, "2028");
     }
 
     #[test]
     fn test_part2() {
         let (_, warehouse, movements) = parse(INPUT2);
         let total_min_tokens = part2(warehouse, &movements);
-        assert_eq!(total_min_tokens, 618);
+        assert_eq!(total_min_tokens, "618");
     }
 }

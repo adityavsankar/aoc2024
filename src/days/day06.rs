@@ -21,7 +21,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Grid<u8> {
+fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
@@ -47,24 +47,27 @@ fn patrol(lab: &Grid<u8>, start: Coord) -> Option<HashSet<Coord>> {
     Some(path.into_iter().map(|robot| robot.position()).collect())
 }
 
-pub fn part1(lab: &Grid<u8>) -> usize {
+fn part1(lab: &Grid<u8>) -> String {
     let start = lab.position(b'^').expect("Lab should have a guard");
     let tiles = patrol(lab, start);
-    tiles.expect("Input should not contain cycles").len()
+    let distinct_position_count = tiles.expect("Input should not contain cycles").len();
+    format!("{distinct_position_count}")
 }
 
-pub fn part2(lab: &Grid<u8>) -> usize {
+fn part2(lab: &Grid<u8>) -> String {
     let start = lab.position(b'^').expect("Lab should have a guard");
     let tiles = patrol(lab, start).expect("Input should not contain cycles");
 
-    tiles
+    let potential_obstruction_count = tiles
         .into_par_iter()
         .filter(|&point| {
             let mut g = lab.to_owned();
             g[point] = b'#';
             patrol(&g, start).is_none()
         })
-        .count()
+        .count();
+
+    format!("{potential_obstruction_count}")
 }
 
 #[cfg(test)]
@@ -95,13 +98,13 @@ mod tests {
     fn test_part1() {
         let lab = parse(INPUT);
         let distinct_position_count = part1(&lab);
-        assert_eq!(distinct_position_count, 41);
+        assert_eq!(distinct_position_count, "41");
     }
 
     #[test]
     fn test_part2() {
         let lab = parse(INPUT);
         let potential_obstruction_count = part2(&lab);
-        assert_eq!(potential_obstruction_count, 6);
+        assert_eq!(potential_obstruction_count, "6");
     }
 }

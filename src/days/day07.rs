@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<(usize, Vec<usize>)> {
+fn parse(input: &str) -> Vec<(usize, Vec<usize>)> {
     input
         .lines()
         .map(|line| {
@@ -37,12 +37,14 @@ pub fn parse(input: &str) -> Vec<(usize, Vec<usize>)> {
         .collect()
 }
 
-pub fn part1(calibration_equations: &[(usize, Vec<usize>)]) -> usize {
-    solve(calibration_equations, false)
+fn part1(calibration_equations: &[(usize, Vec<usize>)]) -> String {
+    let total_calibration_result = solve(calibration_equations, false);
+    format!("{total_calibration_result}")
 }
 
-pub fn part2(calibration_equations: &[(usize, Vec<usize>)]) -> usize {
-    solve(calibration_equations, true)
+fn part2(calibration_equations: &[(usize, Vec<usize>)]) -> String {
+    let total_calibration_result = solve(calibration_equations, true);
+    format!("{total_calibration_result}")
 }
 
 fn solve(calibration_equations: &[(usize, Vec<usize>)], is_part2: bool) -> usize {
@@ -105,13 +107,13 @@ mod tests {
     fn test_part1() {
         let calibration_equations = parse(INPUT);
         let total_calibration_result = part1(&calibration_equations);
-        assert_eq!(total_calibration_result, 3749);
+        assert_eq!(total_calibration_result, "3749");
     }
 
     #[test]
     fn test_part2() {
         let calibration_equations = parse(INPUT);
         let total_calibration_result = part2(&calibration_equations);
-        assert_eq!(total_calibration_result, 11387);
+        assert_eq!(total_calibration_result, "11387");
     }
 }

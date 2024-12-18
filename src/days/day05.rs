@@ -17,9 +17,10 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> (HashSet<(u8, u8)>, Vec<Vec<u8>>) {
+fn parse(input: &str) -> (HashSet<(u8, u8)>, Vec<Vec<u8>>) {
+    let input = input.replace("\r", "");
     let (rules, updates) = input
-        .split_once("\r\n\r\n")
+        .split_once("\n\n")
         .expect("Rules and updates should be separated by a line");
     let rules = rules
         .lines()
@@ -49,16 +50,17 @@ pub fn parse(input: &str) -> (HashSet<(u8, u8)>, Vec<Vec<u8>>) {
     (rules, updates)
 }
 
-pub fn part1(rules: &HashSet<(u8, u8)>, updates: &[Vec<u8>]) -> usize {
-    updates
+fn part1(rules: &HashSet<(u8, u8)>, updates: &[Vec<u8>]) -> String {
+    let correct_order_total: usize = updates
         .iter()
         .filter(|update| update.is_sorted_by(|&a, &b| rules.contains(&(a, b))))
         .map(|update| update[update.len() / 2] as usize)
-        .sum()
+        .sum();
+    format!("{correct_order_total}")
 }
 
-pub fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> usize {
-    updates
+fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> String {
+    let incorrect_order_total: usize = updates
         .into_iter()
         .filter(|update| !update.is_sorted_by(|&a, &b| rules.contains(&(a, b))))
         .map(|mut update| {
@@ -71,7 +73,8 @@ pub fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> usize {
             });
             update[update.len() / 2] as usize
         })
-        .sum()
+        .sum();
+    format!("{incorrect_order_total}")
 }
 
 #[cfg(test)]
@@ -123,13 +126,13 @@ mod tests {
     fn test_part1() {
         let (rules, updates) = parse(INPUT);
         let correct_order_total = part1(&rules, &updates);
-        assert_eq!(correct_order_total, 143);
+        assert_eq!(correct_order_total, "143");
     }
 
     #[test]
     fn test_part2() {
         let (rules, updates) = parse(INPUT);
         let incorrect_order_total = part2(&rules, updates);
-        assert_eq!(incorrect_order_total, 123);
+        assert_eq!(incorrect_order_total, "123");
     }
 }

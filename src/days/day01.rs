@@ -17,7 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
+fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
     let mut left_list = vec![];
     let mut right_list = vec![];
     let mut right_map = HashMap::new();
@@ -45,21 +45,23 @@ pub fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
     (left_list, right_list, right_map)
 }
 
-pub fn part1(left_list: &mut [usize], right_list: &mut [usize]) -> usize {
+fn part1(left_list: &mut [usize], right_list: &mut [usize]) -> String {
     left_list.sort_unstable();
     right_list.sort_unstable();
-    left_list
+    let total_distance: usize = left_list
         .iter()
         .zip(right_list.iter())
         .map(|(&left, &right)| left.abs_diff(right))
-        .sum()
+        .sum();
+    format!("{total_distance}")
 }
 
-pub fn part2(left_list: &[usize], right_map: &HashMap<usize, usize>) -> usize {
-    left_list
+fn part2(left_list: &[usize], right_map: &HashMap<usize, usize>) -> String {
+    let similarity_score: usize = left_list
         .iter()
         .map(|left| left * right_map.get(left).unwrap_or(&0))
-        .sum()
+        .sum();
+    format!("{similarity_score}")
 }
 
 #[cfg(test)]
@@ -81,13 +83,13 @@ mod tests {
     fn test_part1() {
         let (mut left_list, mut right_list, _) = parse(INPUT);
         let total_distance = part1(&mut left_list, &mut right_list);
-        assert_eq!(total_distance, 11);
+        assert_eq!(total_distance, "11");
     }
 
     #[test]
     fn test_part2() {
         let (left_list, _, right_map) = parse(INPUT);
         let similarity_score = part2(&left_list, &right_map);
-        assert_eq!(similarity_score, 31);
+        assert_eq!(similarity_score, "31");
     }
 }

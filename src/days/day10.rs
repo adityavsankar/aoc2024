@@ -20,8 +20,8 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Grid<u8> {
-    input.into()
+fn parse(input: &str) -> Grid<u8> {
+    Grid::from(input)
 }
 
 fn dfs(
@@ -49,10 +49,10 @@ fn dfs(
     rating
 }
 
-pub fn part1(topo_map: &Grid<u8>) -> usize {
+fn part1(topo_map: &Grid<u8>) -> String {
     let mut stack = Vec::new();
     let mut peaks = HashSet::new();
-    topo_map
+    let total_trailhead_score: usize = topo_map
         .iter_with_coords()
         .filter(|(_, &cell)| cell == b'0')
         .map(|(coord, _)| {
@@ -61,16 +61,18 @@ pub fn part1(topo_map: &Grid<u8>) -> usize {
             peaks.clear();
             score
         })
-        .sum()
+        .sum();
+    format!("{total_trailhead_score}")
 }
 
-pub fn part2(topo_map: &Grid<u8>) -> usize {
+fn part2(topo_map: &Grid<u8>) -> String {
     let mut stack = Vec::new();
-    topo_map
+    let total_trailhead_rating: usize = topo_map
         .iter_with_coords()
         .filter(|(_, &cell)| cell == b'0')
         .map(|(coord, _)| dfs(coord, topo_map, &mut stack, None))
-        .sum()
+        .sum();
+    format!("{total_trailhead_rating}")
 }
 
 #[cfg(test)]
@@ -100,13 +102,13 @@ mod tests {
     fn test_part1() {
         let topo_map = parse(INPUT);
         let total_trailhead_score = part1(&topo_map);
-        assert_eq!(total_trailhead_score, 36);
+        assert_eq!(total_trailhead_score, "36");
     }
 
     #[test]
     fn test_part2() {
         let topo_map = parse(INPUT);
         let total_trailhead_rating = part2(&topo_map);
-        assert_eq!(total_trailhead_rating, 81);
+        assert_eq!(total_trailhead_rating, "81");
     }
 }

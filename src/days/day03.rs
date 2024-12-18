@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Match> {
+fn parse(input: &str) -> Vec<Match> {
     Regex::new(r"mul\([0-9]+,[0-9]+\)|do\(\)|don't\(\)")
         .unwrap()
         .find_iter(input)
@@ -38,8 +38,8 @@ fn mul(instruction: &str) -> usize {
     a * b
 }
 
-pub fn part1(instructions: &[Match]) -> usize {
-    instructions
+fn part1(instructions: &[Match]) -> String {
+    let ans: usize = instructions
         .iter()
         .map(|instruction| {
             let instruction = instruction.as_str();
@@ -49,13 +49,14 @@ pub fn part1(instructions: &[Match]) -> usize {
                 0
             }
         })
-        .sum()
+        .sum();
+    format!("{ans}")
 }
 
-pub fn part2(instructions: &[Match]) -> usize {
+fn part2(instructions: &[Match]) -> String {
     let mut enabled = true;
 
-    instructions
+    let ans: usize = instructions
         .iter()
         .map(|instruction| {
             let instruction = instruction.as_str();
@@ -72,7 +73,8 @@ pub fn part2(instructions: &[Match]) -> usize {
                 _ => 0,
             }
         })
-        .sum()
+        .sum();
+    format!("{ans}")
 }
 
 #[cfg(test)]
@@ -101,13 +103,13 @@ mod tests {
     fn test_part1() {
         let instructions = parse(INPUT1);
         let result = part1(&instructions);
-        assert_eq!(result, 161);
+        assert_eq!(result, "161");
     }
 
     #[test]
     fn test_part2() {
         let instructions = parse(INPUT2);
         let enabled_result = part2(&instructions);
-        assert_eq!(enabled_result, 48);
+        assert_eq!(enabled_result, "48");
     }
 }

@@ -21,10 +21,12 @@ pub mod day13;
 pub mod day14;
 pub mod day15;
 pub mod day16;
+pub mod day17;
+pub mod day18;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct DayResult {
     pub parse_duration: Duration,
-    pub part1: TimedResult<usize>,
-    pub part2: TimedResult<usize>,
+    pub part1: TimedResult<String>,
+    pub part2: TimedResult<String>,
 }

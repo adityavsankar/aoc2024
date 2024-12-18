@@ -28,7 +28,7 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Grid<u8> {
+fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
@@ -104,13 +104,14 @@ fn dijkstra(
     unreachable!("Maze end is not reachable")
 }
 
-pub fn part1(maze: &Grid<u8>) -> usize {
+fn part1(maze: &Grid<u8>) -> String {
     let start = maze.position(b'S').expect("Maze should have a start");
     let end = maze.position(b'E').expect("Maze should have an end");
-    dijkstra(maze, start, end).1
+    let min_score = dijkstra(maze, start, end).1;
+    format!("{min_score}")
 }
 
-pub fn part2(maze: &Grid<u8>) -> usize {
+fn part2(maze: &Grid<u8>) -> String {
     let start = maze.position(b'S').expect("Maze should have a start");
     let end = maze.position(b'E').expect("Maze should have an end");
     let (mut prev, _, last_dir) = dijkstra(maze, start, end);
@@ -128,7 +129,8 @@ pub fn part2(maze: &Grid<u8>) -> usize {
         }
     }
 
-    seen.len()
+    let best_seats = seen.len();
+    format!("{best_seats}")
 }
 
 #[cfg(test)]
@@ -165,13 +167,13 @@ mod tests {
     fn test_part1() {
         let maze = parse(INPUT);
         let min_score = part1(&maze);
-        assert_eq!(min_score, 7036);
+        assert_eq!(min_score, "7036");
     }
 
     #[test]
     fn test_part2() {
         let maze = parse(INPUT);
         let best_seats = part2(&maze);
-        assert_eq!(best_seats, 45);
+        assert_eq!(best_seats, "45");
     }
 }

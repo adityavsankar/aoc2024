@@ -17,9 +17,8 @@ pub fn run() -> DayResult {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Coord> {
+fn parse(input: &str) -> Vec<Coord> {
     input
-        .trim()
         .lines()
         .filter(|line| line.len() > 1)
         .map(|line| {
@@ -53,12 +52,14 @@ fn solve(vals: &[Coord], is_part2: bool) -> isize {
         .sum()
 }
 
-pub fn part1(vals: &[Coord]) -> usize {
-    solve(vals, false) as usize
+fn part1(vals: &[Coord]) -> String {
+    let total_min_tokens = solve(vals, false);
+    format!("{total_min_tokens}")
 }
 
-pub fn part2(vals: &[Coord]) -> usize {
-    solve(vals, true) as usize
+fn part2(vals: &[Coord]) -> String {
+    let total_min_tokens = solve(vals, true);
+    format!("{total_min_tokens}")
 }
 
 #[cfg(test)]
@@ -94,13 +95,13 @@ mod tests {
     fn test_part1() {
         let stones = parse(INPUT);
         let total_min_tokens = part1(&stones);
-        assert_eq!(total_min_tokens, 480);
+        assert_eq!(total_min_tokens, "480");
     }
 
     #[test]
     fn test_part2() {
         let stones = parse(INPUT);
         let total_min_tokens = part2(&stones);
-        assert_eq!(total_min_tokens, 875318608908);
+        assert_eq!(total_min_tokens, "875318608908");
     }
 }
