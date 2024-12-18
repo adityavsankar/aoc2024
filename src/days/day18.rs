@@ -67,13 +67,25 @@ fn part1(height: usize, width: usize, corrupted: &[Coord], n: usize) -> String {
 
 fn part2(height: usize, width: usize, corrupted: &[Coord]) -> String {
     let mut memory_space = Grid::new(height, width, b'.');
-    for &coord in corrupted {
-        memory_space[coord] = b'#';
+    let mut best = None;
+    let (mut low, mut high) = (0, corrupted.len() - 1);
+    while low < high {
+        let mid = (low + high) / 2;
+        for &coord in &corrupted[..=mid] {
+            memory_space[coord] = b'#';
+        }
         if bfs(&memory_space).is_none() {
-            return format!("{},{}", coord.x(), coord.y());
+            best = Some(corrupted[mid]);
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+        for &coord in &corrupted[..=mid] {
+            memory_space[coord] = b'.';
         }
     }
-    unreachable!("Corrupted memory did not obstruct the path")
+    let best = best.expect("Memory space should be obstructed for some corrupted byte");
+    format!("{},{}", best.x(), best.y())
 }
 
 #[cfg(test)]

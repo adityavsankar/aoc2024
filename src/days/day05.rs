@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
 }
 
 fn parse(input: &str) -> (HashSet<(u8, u8)>, Vec<Vec<u8>>) {
-    let input = input.replace("\r", "");
+    let input = input.replace('\r', "");
     let (rules, updates) = input
         .split_once("\n\n")
         .expect("Rules and updates should be separated by a line");

@@ -31,15 +31,15 @@ fn parse(input: &str) -> (usize, usize, usize, Vec<usize>) {
 }
 
 fn compute(mut a: usize, mut b: usize, mut c: usize, program: &[usize]) -> Vec<usize> {
-    let n = program.len();
+    let n = program.len() - 1;
     let mut ip = 0;
     let mut output = Vec::new();
 
-    while ip < n - 1 {
+    while ip < n {
         let opcode = program[ip];
         let literal = program[ip + 1];
         let combo = match literal {
-            l @ 0..=3 => l,
+            literal @ 0..=3 => literal,
             4 => a,
             5 => b,
             6 => c,
