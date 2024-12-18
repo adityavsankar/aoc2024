@@ -61,7 +61,7 @@ impl<T: Copy + PartialEq> Grid<T> {
         Coord::new((index / self.width) as isize, (index % self.width) as isize)
     }
 
-    pub fn iter_with_coords(&self) -> impl Iterator<Item = (Coord, &T)> {
+    pub fn enumerate_cells(&self) -> impl Iterator<Item = (Coord, &T)> {
         self.cells
             .iter()
             .enumerate()
@@ -69,8 +69,14 @@ impl<T: Copy + PartialEq> Grid<T> {
     }
 
     pub fn position(&self, target: T) -> Option<Coord> {
-        self.iter_with_coords()
-            .find(|&(_, cell)| *cell == target)
+        self.enumerate_cells()
+            .find(|(_, cell)| **cell == target)
+            .map(|(coord, _)| coord)
+    }
+
+    pub fn positions(&self, target: T) -> impl Iterator<Item = Coord> + use<'_, T> {
+        self.enumerate_cells()
+            .filter(move |(_, cell)| **cell == target)
             .map(|(coord, _)| coord)
     }
 

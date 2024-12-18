@@ -57,7 +57,7 @@ fn part1(word_search: &[Vec<u8>], target: &[u8]) -> String {
     for r in 0..m {
         for c in 0..n {
             if word_search[r][c] == first_char {
-                xmas_count += match_count(word_search, target, r, c, m, n) as u64;
+                xmas_count += u64::from(match_count(word_search, target, r, c, m, n));
             }
         }
     }

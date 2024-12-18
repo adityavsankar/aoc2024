@@ -54,7 +54,7 @@ fn part1(rules: &HashSet<(u8, u8)>, updates: &[Vec<u8>]) -> String {
     let correct_order_total: u64 = updates
         .iter()
         .filter(|update| update.is_sorted_by(|&a, &b| rules.contains(&(a, b))))
-        .map(|update| update[update.len() / 2] as u64)
+        .map(|update| u64::from(update[update.len() / 2]))
         .sum();
     format!("{correct_order_total}")
 }
@@ -71,7 +71,7 @@ fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> String {
                     Ordering::Greater
                 }
             });
-            update[update.len() / 2] as u64
+            u64::from(update[update.len() / 2])
         })
         .sum();
     format!("{incorrect_order_total}")

@@ -23,7 +23,7 @@ fn parse(input: &str) -> (Vec<i64>, Vec<(u64, u64)>, Vec<(u64, u64)>) {
     let mut pos = 0;
 
     for (i, c) in input.trim().bytes().enumerate() {
-        let len = (c - b'0') as u64;
+        let len = u64::from(c - b'0');
         if i % 2 == 0 {
             disk.extend(repeat(i as i64 / 2).take(len as usize));
             files.push((pos, len));

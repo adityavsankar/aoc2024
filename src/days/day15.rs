@@ -88,9 +88,8 @@ fn part1(mut warehouse: Grid<u8>, movements: &[Direction]) -> String {
     }
 
     let total_gps_coordinates: isize = warehouse
-        .iter_with_coords()
-        .filter(|(_, ch)| **ch == b'O')
-        .map(|(coord, _)| coord.r * 100 + coord.c)
+        .positions(b'O')
+        .map(|coord| coord.r * 100 + coord.c)
         .sum();
     format!("{total_gps_coordinates}")
 }
@@ -193,9 +192,8 @@ fn part2(mut warehouse: Grid<u8>, movements: &[Direction]) -> String {
     }
 
     let total_gps_coordinates: isize = warehouse
-        .iter_with_coords()
-        .filter(|(_, ch)| **ch == b'[')
-        .map(|(coord, _)| coord.r * 100 + coord.c)
+        .positions(b'[')
+        .map(|coord| coord.r * 100 + coord.c)
         .sum();
     format!("{total_gps_coordinates}")
 }

@@ -53,9 +53,8 @@ fn part1(topo_map: &Grid<u8>) -> String {
     let mut stack = Vec::new();
     let mut peaks = HashSet::new();
     let total_trailhead_score: usize = topo_map
-        .iter_with_coords()
-        .filter(|(_, &cell)| cell == b'0')
-        .map(|(coord, _)| {
+        .positions(b'0')
+        .map(|coord| {
             dfs(coord, topo_map, &mut stack, Some(&mut peaks));
             let score = peaks.len();
             peaks.clear();
@@ -68,9 +67,8 @@ fn part1(topo_map: &Grid<u8>) -> String {
 fn part2(topo_map: &Grid<u8>) -> String {
     let mut stack = Vec::new();
     let total_trailhead_rating: usize = topo_map
-        .iter_with_coords()
-        .filter(|(_, &cell)| cell == b'0')
-        .map(|(coord, _)| dfs(coord, topo_map, &mut stack, None))
+        .positions(b'0')
+        .map(|coord| dfs(coord, topo_map, &mut stack, None))
         .sum();
     format!("{total_trailhead_rating}")
 }

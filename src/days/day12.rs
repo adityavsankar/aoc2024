@@ -82,7 +82,7 @@ where
     F: Fn(&Grid<u8>, &HashSet<Coord>, u8) -> usize,
 {
     let mut visited = HashSet::with_capacity(farm.height() * farm.width());
-    farm.iter_with_coords()
+    farm.enumerate_cells()
         .filter_map(|(coord, &plant)| {
             if visited.contains(&coord) {
                 return None;
