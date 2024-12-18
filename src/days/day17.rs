@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> (usize, usize, usize, Vec<usize>) {
+fn parse(input: &str) -> (u64, u64, u64, Vec<u64>) {
     let lines: Vec<&str> = input.lines().collect();
     let a = lines[0][12..].parse().unwrap();
     let b = lines[1][12..].parse().unwrap();
@@ -30,7 +30,7 @@ fn parse(input: &str) -> (usize, usize, usize, Vec<usize>) {
     (a, b, c, program)
 }
 
-fn compute(mut a: usize, mut b: usize, mut c: usize, program: &[usize]) -> Vec<usize> {
+fn compute(mut a: u64, mut b: u64, mut c: u64, program: &[u64]) -> Vec<u64> {
     let n = program.len() - 1;
     let mut ip = 0;
     let mut output = Vec::new();
@@ -52,7 +52,7 @@ fn compute(mut a: usize, mut b: usize, mut c: usize, program: &[usize]) -> Vec<u
             2 => b = combo % 8,
             3 => {
                 if a != 0 {
-                    ip = literal;
+                    ip = literal as usize;
                     continue;
                 }
             }
@@ -68,12 +68,12 @@ fn compute(mut a: usize, mut b: usize, mut c: usize, program: &[usize]) -> Vec<u
     output
 }
 
-fn part1(a: usize, b: usize, c: usize, program: &[usize]) -> String {
+fn part1(a: u64, b: u64, c: u64, program: &[u64]) -> String {
     let output = compute(a, b, c, program);
     output.iter().join(",")
 }
 
-fn part2(program: &[usize]) -> String {
+fn part2(program: &[u64]) -> String {
     let mut a = 1;
     let mut index = program.len() - 1;
     loop {

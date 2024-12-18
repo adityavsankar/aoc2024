@@ -51,16 +51,16 @@ fn parse(input: &str) -> (HashSet<(u8, u8)>, Vec<Vec<u8>>) {
 }
 
 fn part1(rules: &HashSet<(u8, u8)>, updates: &[Vec<u8>]) -> String {
-    let correct_order_total: usize = updates
+    let correct_order_total: u64 = updates
         .iter()
         .filter(|update| update.is_sorted_by(|&a, &b| rules.contains(&(a, b))))
-        .map(|update| update[update.len() / 2] as usize)
+        .map(|update| update[update.len() / 2] as u64)
         .sum();
     format!("{correct_order_total}")
 }
 
 fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> String {
-    let incorrect_order_total: usize = updates
+    let incorrect_order_total: u64 = updates
         .into_iter()
         .filter(|update| !update.is_sorted_by(|&a, &b| rules.contains(&(a, b))))
         .map(|mut update| {
@@ -71,7 +71,7 @@ fn part2(rules: &HashSet<(u8, u8)>, updates: Vec<Vec<u8>>) -> String {
                     Ordering::Greater
                 }
             });
-            update[update.len() / 2] as usize
+            update[update.len() / 2] as u64
         })
         .sum();
     format!("{incorrect_order_total}")

@@ -29,14 +29,14 @@ fn match_count(
     m: usize,
     n: usize,
 ) -> u8 {
-    let (m, n, r, c) = (m as isize, n as isize, r as isize, c as isize);
+    let (m, n, r, c) = (m as i64, n as i64, r as i64, c as i64);
     let mut count = 0;
 
     for i in -1..=1 {
         for j in -1..=1 {
             if target.iter().enumerate().all(|(k, &ch)| {
-                let nr = r + k as isize * i;
-                let nc = c + k as isize * j;
+                let nr = r + k as i64 * i;
+                let nc = c + k as i64 * j;
                 (0..m).contains(&nr)
                     && (0..n).contains(&nc)
                     && word_search[nr as usize][nc as usize] == ch
@@ -57,7 +57,7 @@ fn part1(word_search: &[Vec<u8>], target: &[u8]) -> String {
     for r in 0..m {
         for c in 0..n {
             if word_search[r][c] == first_char {
-                xmas_count += match_count(word_search, target, r, c, m, n) as usize;
+                xmas_count += match_count(word_search, target, r, c, m, n) as u64;
             }
         }
     }

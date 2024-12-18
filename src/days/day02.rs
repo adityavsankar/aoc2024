@@ -18,14 +18,14 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> Vec<Vec<usize>> {
+fn parse(input: &str) -> Vec<Vec<u64>> {
     let lines = input.lines();
     lines
         .map(|line| {
             line.split(' ')
                 .map(|level| {
                     level
-                        .parse::<usize>()
+                        .parse()
                         .expect("Input should only contain positive integers")
                 })
                 .collect()
@@ -33,7 +33,7 @@ fn parse(input: &str) -> Vec<Vec<usize>> {
         .collect()
 }
 
-fn is_safe(report: &[usize]) -> bool {
+fn is_safe(report: &[u64]) -> bool {
     let is_monotonic =
         report.is_sorted() || report.is_sorted_by(|level_a, level_b| level_a >= level_b);
     let is_gradual = report
@@ -42,12 +42,12 @@ fn is_safe(report: &[usize]) -> bool {
     is_monotonic && is_gradual
 }
 
-fn part1(reports: &[Vec<usize>]) -> String {
+fn part1(reports: &[Vec<u64>]) -> String {
     let safe_report_count = reports.iter().filter(|report| is_safe(report)).count();
     format!("{safe_report_count}")
 }
 
-fn part2(reports: Vec<Vec<usize>>) -> String {
+fn part2(reports: Vec<Vec<u64>>) -> String {
     let safe_report_count = reports
         .into_iter()
         .map(|report| {

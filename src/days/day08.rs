@@ -28,16 +28,6 @@ fn parse(input: &str) -> Grid<u8> {
     Grid::from(input)
 }
 
-fn part1(city: &Grid<u8>) -> String {
-    let antinode_count = solve(city, false);
-    format!("{antinode_count}")
-}
-
-fn part2(city: &Grid<u8>) -> String {
-    let antinode_count = solve(city, true);
-    format!("{antinode_count}")
-}
-
 fn find_antennae(city: &Grid<u8>) -> HashMap<u8, Vec<Coord>> {
     let mut antenna_map: HashMap<u8, Vec<Coord>> = HashMap::new();
     city.iter_with_coords()
@@ -72,6 +62,16 @@ fn solve(city: &Grid<u8>, is_part2: bool) -> usize {
     }
 
     antinodes.len()
+}
+
+fn part1(city: &Grid<u8>) -> String {
+    let antinode_count = solve(city, false);
+    format!("{antinode_count}")
+}
+
+fn part2(city: &Grid<u8>) -> String {
+    let antinode_count = solve(city, true);
+    format!("{antinode_count}")
 }
 
 #[cfg(test)]

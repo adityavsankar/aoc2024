@@ -25,21 +25,21 @@ fn parse(input: &str) -> Vec<Match> {
         .collect()
 }
 
-fn mul(instruction: &str) -> usize {
+fn mul(instruction: &str) -> u64 {
     let (a, b) = instruction[4..instruction.len() - 1]
         .split_once(',')
         .unwrap();
     let (a, b) = (
-        a.parse::<usize>()
+        a.parse::<u64>()
             .expect("Input should only contain positive integers"),
-        b.parse::<usize>()
+        b.parse::<u64>()
             .expect("Input should only contain positive integers"),
     );
     a * b
 }
 
 fn part1(instructions: &[Match]) -> String {
-    let ans: usize = instructions
+    let ans: u64 = instructions
         .iter()
         .map(|instruction| {
             let instruction = instruction.as_str();
@@ -56,7 +56,7 @@ fn part1(instructions: &[Match]) -> String {
 fn part2(instructions: &[Match]) -> String {
     let mut enabled = true;
 
-    let ans: usize = instructions
+    let ans: u64 = instructions
         .iter()
         .map(|instruction| {
             let instruction = instruction.as_str();

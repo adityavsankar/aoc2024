@@ -36,7 +36,7 @@ type Node = Robot;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct State {
-    pub cost: usize,
+    pub cost: u64,
     pub node: Node,
 }
 
@@ -65,7 +65,7 @@ fn dijkstra(
     maze: &Grid<u8>,
     start: Coord,
     end: Coord,
-) -> (HashMap<Node, Vec<Node>>, usize, Direction) {
+) -> (HashMap<Node, Vec<Node>>, u64, Direction) {
     let mut costs = HashMap::with_capacity(1024);
     let mut prev = HashMap::with_capacity(1024);
     let mut pq = BinaryHeap::with_capacity(1024);
@@ -89,7 +89,7 @@ fn dijkstra(
             if maze[node.pos] == b'#' {
                 continue;
             }
-            let best = *costs.get(&node).unwrap_or(&usize::MAX);
+            let best = *costs.get(&node).unwrap_or(&u64::MAX);
             if cost <= best {
                 pq.push(State { cost, node });
                 costs.insert(node, cost);

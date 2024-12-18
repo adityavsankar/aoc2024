@@ -17,7 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
+fn parse(input: &str) -> (Vec<u64>, Vec<u64>, HashMap<u64, u64>) {
     let mut left_list = vec![];
     let mut right_list = vec![];
     let mut right_map = HashMap::new();
@@ -28,10 +28,10 @@ fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
             .expect("Exactly two numbers should be present on each line separated by three spaces");
 
         let left = left
-            .parse::<usize>()
+            .parse()
             .expect("Left half should be a positive integer");
         let right = right
-            .parse::<usize>()
+            .parse()
             .expect("Right half should be a positive integer");
 
         left_list.push(left);
@@ -45,10 +45,10 @@ fn parse(input: &str) -> (Vec<usize>, Vec<usize>, HashMap<usize, usize>) {
     (left_list, right_list, right_map)
 }
 
-fn part1(left_list: &mut [usize], right_list: &mut [usize]) -> String {
+fn part1(left_list: &mut [u64], right_list: &mut [u64]) -> String {
     left_list.sort_unstable();
     right_list.sort_unstable();
-    let total_distance: usize = left_list
+    let total_distance: u64 = left_list
         .iter()
         .zip(right_list.iter())
         .map(|(&left, &right)| left.abs_diff(right))
@@ -56,8 +56,8 @@ fn part1(left_list: &mut [usize], right_list: &mut [usize]) -> String {
     format!("{total_distance}")
 }
 
-fn part2(left_list: &[usize], right_map: &HashMap<usize, usize>) -> String {
-    let similarity_score: usize = left_list
+fn part2(left_list: &[u64], right_map: &HashMap<u64, u64>) -> String {
+    let similarity_score: u64 = left_list
         .iter()
         .map(|left| left * right_map.get(left).unwrap_or(&0))
         .sum();

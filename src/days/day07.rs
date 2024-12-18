@@ -18,7 +18,7 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> Vec<(usize, Vec<usize>)> {
+fn parse(input: &str) -> Vec<(u64, Vec<u64>)> {
     input
         .lines()
         .map(|line| {
@@ -37,18 +37,18 @@ fn parse(input: &str) -> Vec<(usize, Vec<usize>)> {
         .collect()
 }
 
-fn part1(calibration_equations: &[(usize, Vec<usize>)]) -> String {
+fn part1(calibration_equations: &[(u64, Vec<u64>)]) -> String {
     let total_calibration_result = solve(calibration_equations, false);
     format!("{total_calibration_result}")
 }
 
-fn part2(calibration_equations: &[(usize, Vec<usize>)]) -> String {
+fn part2(calibration_equations: &[(u64, Vec<u64>)]) -> String {
     let total_calibration_result = solve(calibration_equations, true);
     format!("{total_calibration_result}")
 }
 
-fn solve(calibration_equations: &[(usize, Vec<usize>)], is_part2: bool) -> usize {
-    fn is_possible(acc: usize, arr: &[usize], i: usize, target: usize, is_part2: bool) -> bool {
+fn solve(calibration_equations: &[(u64, Vec<u64>)], is_part2: bool) -> u64 {
+    fn is_possible(acc: u64, arr: &[u64], i: usize, target: u64, is_part2: bool) -> bool {
         if i >= arr.len() {
             acc == target
         } else if acc > target {
@@ -58,7 +58,7 @@ fn solve(calibration_equations: &[(usize, Vec<usize>)], is_part2: bool) -> usize
                 || is_possible(acc * arr[i], arr, i + 1, target, is_part2)
                 || if is_part2 {
                     is_possible(
-                        acc * 10_usize.pow(arr[i].ilog10() + 1) + arr[i],
+                        acc * 10_u64.pow(arr[i].ilog10() + 1) + arr[i],
                         arr,
                         i + 1,
                         target,

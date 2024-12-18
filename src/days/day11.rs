@@ -17,7 +17,7 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> Vec<usize> {
+fn parse(input: &str) -> Vec<u64> {
     input
         .trim()
         .split(' ')
@@ -29,7 +29,7 @@ fn parse(input: &str) -> Vec<usize> {
         .collect()
 }
 
-fn solve(stones: &[usize], blinks: u8) -> usize {
+fn solve(stones: &[u64], blinks: u8) -> usize {
     let mut stone_counts = HashMap::with_capacity(6000);
     for &stone in stones {
         *stone_counts.entry(stone).or_default() += 1;
@@ -43,7 +43,7 @@ fn solve(stones: &[usize], blinks: u8) -> usize {
             } else {
                 let len = stone.ilog10() + 1;
                 if len % 2 == 0 {
-                    let mid_idx = 10_usize.pow(len / 2);
+                    let mid_idx = 10_u64.pow(len / 2);
                     let left = stone / mid_idx;
                     let right = stone % mid_idx;
                     *new_counts.entry(left).or_default() += count;
@@ -59,12 +59,12 @@ fn solve(stones: &[usize], blinks: u8) -> usize {
     stone_counts.values().sum()
 }
 
-fn part1(stones: &[usize]) -> String {
+fn part1(stones: &[u64]) -> String {
     let stone_count = solve(stones, 25);
     format!("{stone_count}")
 }
 
-fn part2(stones: &[usize]) -> String {
+fn part2(stones: &[u64]) -> String {
     let stone_count = solve(stones, 75);
     format!("{stone_count}")
 }

@@ -18,17 +18,17 @@ pub fn run() -> DayResult {
 }
 
 #[allow(clippy::type_complexity)]
-fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize)>) {
+fn parse(input: &str) -> (Vec<i64>, Vec<(u64, u64)>, Vec<(u64, u64)>) {
     let (mut disk, mut files, mut holes) = (Vec::new(), Vec::new(), Vec::new());
     let mut pos = 0;
 
     for (i, c) in input.trim().bytes().enumerate() {
-        let len = (c - b'0') as usize;
+        let len = (c - b'0') as u64;
         if i % 2 == 0 {
-            disk.extend(repeat(i as isize / 2).take(len));
+            disk.extend(repeat(i as i64 / 2).take(len as usize));
             files.push((pos, len));
         } else {
-            disk.extend(repeat(-1).take(len));
+            disk.extend(repeat(-1).take(len as usize));
             holes.push((pos, len));
         }
         pos += len;
@@ -37,7 +37,7 @@ fn parse(input: &str) -> (Vec<isize>, Vec<(usize, usize)>, Vec<(usize, usize)>) 
     (disk, files, holes)
 }
 
-fn part1(mut disk: Vec<isize>) -> String {
+fn part1(mut disk: Vec<i64>) -> String {
     let mut hole_idx = disk
         .iter()
         .position(|&block| block < 0)
@@ -58,15 +58,15 @@ fn part1(mut disk: Vec<isize>) -> String {
         }
     }
 
-    let checksum: usize = disk[..hole_idx]
+    let checksum: i64 = disk[..hole_idx]
         .iter()
         .enumerate()
-        .map(|(i, &block)| i * block as usize)
+        .map(|(i, &block)| i as i64 * block)
         .sum();
     format!("{checksum}")
 }
 
-fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> String {
+fn part2(mut files: Vec<(u64, u64)>, mut holes: Vec<(u64, u64)>) -> String {
     for (file_pos, file_len) in files.iter_mut().rev() {
         for (hole_pos, hole_len) in &mut holes {
             if *hole_pos > *file_pos {
@@ -81,10 +81,10 @@ fn part2(mut files: Vec<(usize, usize)>, mut holes: Vec<(usize, usize)>) -> Stri
         }
     }
 
-    let checksum: usize = files
+    let checksum: u64 = files
         .iter()
         .enumerate()
-        .map(|(i, &(file_pos, file_len))| (file_pos..file_pos + file_len).sum::<usize>() * i)
+        .map(|(i, &(file_pos, file_len))| (file_pos..file_pos + file_len).sum::<u64>() * i as u64)
         .sum();
     format!("{checksum}")
 }
