@@ -17,25 +17,34 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> Vec<Coord> {
+type Pair = Coord;
+
+fn parse(input: &str) -> Vec<Pair> {
     input
         .lines()
         .filter(|line| line.len() > 1)
         .map(|line| {
-            let (_, right) = line.split_once(": ").unwrap();
-            let (x, y) = right.split_once(", ").unwrap();
-            Coord::new(y[2..].parse().unwrap(), x[2..].parse().unwrap())
+            let (_, right) = line
+                .split_once(": ")
+                .expect("Label and values should be colon separated");
+            let (x, y) = right
+                .split_once(", ")
+                .expect("X and Y components should be comma separated");
+            Pair::new(
+                y[2..].parse().expect("Y component should be an integer"),
+                x[2..].parse().expect("X component should be an integer"),
+            )
         })
         .collect()
 }
 
-fn solve(vals: &[Coord], is_part2: bool) -> isize {
+fn solve(vals: &[Pair], is_part2: bool) -> isize {
     vals.chunks(3)
         .filter_map(|q| {
             let a_button = q[0];
             let b_button = q[1];
             let prize = if is_part2 {
-                q[2] + Coord::new(10_000_000_000_000, 10_000_000_000_000)
+                q[2] + Pair::new(10_000_000_000_000, 10_000_000_000_000)
             } else {
                 q[2]
             };
@@ -52,12 +61,12 @@ fn solve(vals: &[Coord], is_part2: bool) -> isize {
         .sum()
 }
 
-fn part1(vals: &[Coord]) -> String {
+fn part1(vals: &[Pair]) -> String {
     let total_min_tokens = solve(vals, false);
     format!("{total_min_tokens}")
 }
 
-fn part2(vals: &[Coord]) -> String {
+fn part2(vals: &[Pair]) -> String {
     let total_min_tokens = solve(vals, true);
     format!("{total_min_tokens}")
 }
@@ -75,18 +84,18 @@ mod tests {
         assert_eq!(
             stones,
             vec![
-                Coord::new(34, 94),
-                Coord::new(67, 22),
-                Coord::new(5400, 8400),
-                Coord::new(66, 26),
-                Coord::new(21, 67),
-                Coord::new(12176, 12748),
-                Coord::new(86, 17),
-                Coord::new(37, 84),
-                Coord::new(6450, 7870),
-                Coord::new(23, 69),
-                Coord::new(71, 27),
-                Coord::new(10279, 18641)
+                Pair::new(34, 94),
+                Pair::new(67, 22),
+                Pair::new(5400, 8400),
+                Pair::new(66, 26),
+                Pair::new(21, 67),
+                Pair::new(12176, 12748),
+                Pair::new(86, 17),
+                Pair::new(37, 84),
+                Pair::new(6450, 7870),
+                Pair::new(23, 69),
+                Pair::new(71, 27),
+                Pair::new(10279, 18641)
             ]
         );
     }

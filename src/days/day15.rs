@@ -26,7 +26,9 @@ pub fn run() -> DayResult {
 
 fn parse(input: &str) -> (Grid<u8>, Grid<u8>, Vec<Direction>) {
     let input = input.trim().replace('\r', "");
-    let (warehouse, movements) = input.split_once("\n\n").unwrap();
+    let (warehouse, movements) = input
+        .split_once("\n\n")
+        .expect("Warehouse and movements should be separated by a blank line");
 
     let grid = Grid::from(warehouse);
 

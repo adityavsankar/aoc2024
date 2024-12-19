@@ -20,12 +20,18 @@ pub fn run() -> DayResult {
 
 fn parse(input: &str) -> (u64, u64, u64, Vec<u64>) {
     let lines: Vec<&str> = input.lines().collect();
-    let a = lines[0][12..].parse().unwrap();
-    let b = lines[1][12..].parse().unwrap();
-    let c = lines[2][12..].parse().unwrap();
+    let a = lines[0][12..]
+        .parse()
+        .expect("Register A value should be an integer");
+    let b = lines[1][12..]
+        .parse()
+        .expect("Register A value should be an integer");
+    let c = lines[2][12..]
+        .parse()
+        .expect("Register A value should be an integer");
     let program = lines[4][9..]
         .split(',')
-        .map(|n| n.parse().unwrap())
+        .map(|n| n.parse().expect("Program should consist of integers"))
         .collect();
     (a, b, c, program)
 }
@@ -43,7 +49,7 @@ fn compute(mut a: u64, mut b: u64, mut c: u64, program: &[u64]) -> Vec<u64> {
             4 => a,
             5 => b,
             6 => c,
-            _ => unreachable!(),
+            _ => unreachable!("Invalid literal operand"),
         };
 
         match opcode {
@@ -60,7 +66,7 @@ fn compute(mut a: u64, mut b: u64, mut c: u64, program: &[u64]) -> Vec<u64> {
             5 => output.push(combo % 8),
             6 => b = a >> combo,
             7 => c = a >> combo,
-            _ => unreachable!(),
+            _ => unreachable!("Invalid opcode"),
         }
 
         ip += 2;

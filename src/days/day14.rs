@@ -21,26 +21,38 @@ pub fn run() -> DayResult {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct Robot14 {
+struct Robot {
     pub pos: Coord,
     pub vel: Coord,
 }
 
-fn parse(input: &str) -> Vec<Robot14> {
+fn parse(input: &str) -> Vec<Robot> {
     input
         .lines()
         .map(|line| {
-            let (pos, vel) = line.split_once(' ').unwrap();
-            let (pos_x, pos_y) = pos.split_once(',').unwrap();
-            let pos = Coord::new(pos_y.parse().unwrap(), pos_x[2..].parse().unwrap());
-            let (vel_x, vel_y) = vel.split_once(',').unwrap();
-            let vel = Coord::new(vel_y.parse().unwrap(), vel_x[2..].parse().unwrap());
-            Robot14 { pos, vel }
+            let (pos, vel) = line
+                .split_once(' ')
+                .expect("Position and Velocity should be separated by a space");
+            let (pos_x, pos_y) = pos
+                .split_once(',')
+                .expect("Coordinates should have comma separated components");
+            let pos = Coord::new(
+                pos_y.parse().expect("Y Position should be an integer"),
+                pos_x[2..].parse().expect("X Position should be an integer"),
+            );
+            let (vel_x, vel_y) = vel
+                .split_once(',')
+                .expect("Coordinates should have comma separated components");
+            let vel = Coord::new(
+                vel_y.parse().expect("Y Velocity should be an integer"),
+                vel_x[2..].parse().expect("X Velocity should be an integer"),
+            );
+            Robot { pos, vel }
         })
         .collect()
 }
 
-fn part1(robots: &[Robot14], time: usize, height: usize, width: usize) -> String {
+fn part1(robots: &[Robot], time: usize, height: usize, width: usize) -> String {
     let (time, height, width) = (time as isize, height as isize, width as isize);
     let (half_height, half_width) = (height / 2, width / 2);
     let (mut top_left, mut top_right, mut bot_left, mut bot_right) = (0, 0, 0, 0);
@@ -69,7 +81,7 @@ fn part1(robots: &[Robot14], time: usize, height: usize, width: usize) -> String
     format!("{safety_factor}")
 }
 
-fn part2(robots: &[Robot14], height: usize, width: usize) -> String {
+fn part2(robots: &[Robot], height: usize, width: usize) -> String {
     let (height, width) = (height as isize, width as isize);
     let mut elapsed = 0;
     let mut seen = Grid::new(height as usize, width as usize, false);
@@ -104,51 +116,51 @@ mod tests {
         assert_eq!(
             robots,
             vec![
-                Robot14 {
+                Robot {
                     pos: Coord::new(4, 0),
                     vel: Coord::new(-3, 3)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(3, 6),
                     vel: Coord::new(-3, -1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(3, 10),
                     vel: Coord::new(2, -1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(0, 2),
                     vel: Coord::new(-1, 2)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(0, 0),
                     vel: Coord::new(3, 1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(0, 3),
                     vel: Coord::new(-2, -2)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(6, 7),
                     vel: Coord::new(-3, -1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(0, 3),
                     vel: Coord::new(-2, -1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(3, 9),
                     vel: Coord::new(3, 2)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(3, 7),
                     vel: Coord::new(2, -1)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(4, 2),
                     vel: Coord::new(-3, 2)
                 },
-                Robot14 {
+                Robot {
                     pos: Coord::new(5, 9),
                     vel: Coord::new(-3, -3)
                 },

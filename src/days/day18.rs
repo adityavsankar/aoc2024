@@ -24,8 +24,13 @@ fn parse(input: &str) -> Vec<Coord> {
     input
         .lines()
         .map(|line| {
-            let (c, r) = line.split_once(',').unwrap();
-            let (c, r) = (c.parse().unwrap(), r.parse().unwrap());
+            let (c, r) = line
+                .split_once(',')
+                .expect("Coordinates should have comma separated components");
+            let (c, r) = (
+                c.parse().expect("X Coordinate should be an integer"),
+                r.parse().expect("Y Coordinate should be an integer"),
+            );
             Coord::new(r, c)
         })
         .collect()
