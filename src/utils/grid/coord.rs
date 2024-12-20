@@ -20,7 +20,7 @@ impl Coord {
         self.r
     }
 
-    pub fn manhattan_distance(&self, rhs: Self) -> usize {
+    pub fn taxicab_distance(&self, rhs: Self) -> usize {
         self.r.abs_diff(rhs.r) + self.c.abs_diff(rhs.c)
     }
 
