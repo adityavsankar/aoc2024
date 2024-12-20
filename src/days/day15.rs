@@ -203,7 +203,7 @@ fn part2(mut warehouse: Grid<u8>, movements: &[Direction]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use core::str;
+    use std::str;
 
     const INPUT1: &'static str = "########\n#..O.O.#\n##@.O..#\n#...O..#\n#.#.O..#\n#...O..#\n#......#\n########\n\n<^^>>>vv<v>>v<<";
     const INPUT2: &'static str =

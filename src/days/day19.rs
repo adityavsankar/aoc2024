@@ -1,7 +1,6 @@
 use super::DayResult;
 use crate::utils::bench::time_execution;
-use rayon::prelude::*;
-use std::{collections::HashSet, fs};
+use std::fs;
 
 pub fn run() -> DayResult {
     let input = fs::read_to_string("inputs/19.in").expect("Input file should be readable");
@@ -18,58 +17,93 @@ pub fn run() -> DayResult {
     }
 }
 
-fn parse(input: &str) -> (HashSet<String>, Vec<String>) {
+#[derive(Debug, Clone, Default, PartialEq)]
+struct TrieNode {
+    children: [Option<Box<TrieNode>>; 5],
+    is_end: bool,
+}
+
+impl TrieNode {
+    fn byte_to_index(b: u8) -> usize {
+        usize::from((b % 9) % 5)
+    }
+
+    fn insert(&mut self, word: &str) {
+        let mut node = self;
+        for b in word.bytes() {
+            let idx = TrieNode::byte_to_index(b);
+            node = node.children[idx].get_or_insert_with(|| Box::new(TrieNode::default()));
+        }
+        node.is_end = true;
+    }
+
+    fn search_prefix<F: FnMut(usize)>(&self, s: &str, start: usize, mut on_match: F) {
+        let mut node = self;
+        for (i, b) in s.bytes().skip(start).enumerate() {
+            let idx = TrieNode::byte_to_index(b);
+            if let Some(next_node) = &node.children[idx] {
+                node = next_node;
+                if node.is_end {
+                    on_match(start + i + 1);
+                }
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+impl<'a> FromIterator<&'a str> for TrieNode {
+    fn from_iter<T: IntoIterator<Item = &'a str>>(iter: T) -> Self {
+        let mut root = TrieNode::default();
+        for word in iter {
+            root.insert(word);
+        }
+        root
+    }
+}
+
+fn parse(input: &str) -> (TrieNode, Vec<String>) {
     let input = input.replace('\r', "");
-    let (towels, designs) = input
-        .split_once("\n\n")
-        .expect("Towels and Designs should be separated by a blank line");
-    let towels = towels.split(", ").map(String::from).collect();
+    let (towels, designs) = input.split_once("\n\n").unwrap();
+    let towels = towels.split(", ").collect();
     let designs = designs.lines().map(String::from).collect();
     (towels, designs)
 }
 
-fn solve(design: &str, towels: &HashSet<String>) -> u64 {
+fn count_arrangements(design: &str, towels: &TrieNode) -> u64 {
     let n = design.len();
-    let k = towels
-        .iter()
-        .map(String::len)
-        .max()
-        .expect("There should be at least one towel");
-    let mut dp = vec![0; n + 1];
+    let mut dp = vec![0u64; n + 1];
     dp[0] = 1;
 
     for i in 0..n {
-        if dp[i] == 0 {
-            continue;
-        }
-        for j in i + 1..=n.min(i + k) {
-            if towels.contains(&design[i..j]) {
-                dp[j] += dp[i];
-            }
-        }
+        towels.search_prefix(design, i, |end| {
+            dp[end] += dp[i];
+        });
     }
 
     dp[n]
 }
 
-fn part1(towels: &HashSet<String>, designs: &[String]) -> String {
+fn part1(towels: &TrieNode, designs: &[String]) -> String {
     let possible_design_count = designs
-        .par_iter()
-        .filter(|design| solve(design, towels) != 0)
+        .iter()
+        .filter(|design| count_arrangements(design, towels) != 0)
         .count();
     format!("{possible_design_count}")
 }
 
-fn part2(towels: &HashSet<String>, designs: &[String]) -> String {
-    let total_design_arrangements: u64 =
-        designs.par_iter().map(|design| solve(design, towels)).sum();
+fn part2(towels: &TrieNode, designs: &[String]) -> String {
+    let total_design_arrangements: u64 = designs
+        .iter()
+        .map(|design| count_arrangements(design, towels))
+        .sum();
     format!("{total_design_arrangements}")
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use core::str;
 
     const INPUT: &'static str =
         "r, wr, b, g, bwu, rb, gb, br\n\nbrwrr\nbggr\ngbbr\nrrbgbr\nubwu\nbwurrg\nbrgr\nbbrgwb";
@@ -80,16 +114,9 @@ mod tests {
 
         assert_eq!(
             towels,
-            HashSet::from([
-                "r".into(),
-                "wr".into(),
-                "b".into(),
-                "g".into(),
-                "bwu".into(),
-                "rb".into(),
-                "gb".into(),
-                "br".into()
-            ])
+            ["r", "wr", "b", "g", "bwu", "rb", "gb", "br"]
+                .into_iter()
+                .collect()
         );
 
         assert_eq!(designs.len(), 8);
